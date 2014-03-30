@@ -67,6 +67,9 @@ public class usecase1 {
 			assertTrue(member_1.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0)));
 		}
 		
+		SubForum sub_animals = member_1.search_subforum("Theme","Animals");
+		SubForum sub_Music = member_1.search_subforum("Moderator","sapir");
+		
 		
 		
 		
