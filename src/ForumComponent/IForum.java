@@ -1,6 +1,6 @@
 package ForumComponent;
 
-//hijg my name hod
+//hijg my ndsadasd
 
 public interface IForum {
 	
