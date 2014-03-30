@@ -1,6 +1,5 @@
 package ForumComponent;
 
-//hijg my is
 
 public interface IForum {
 	
