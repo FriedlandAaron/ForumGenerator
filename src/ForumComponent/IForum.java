@@ -1,5 +1,7 @@
 package ForumComponent;
 
+//hijg my name hod
+
 public interface IForum {
 	
 	/**
