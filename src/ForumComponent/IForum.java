@@ -1,7 +1,5 @@
 package ForumComponent;
 
-//hi!
-
 public interface IForum {
 	
 	/**
