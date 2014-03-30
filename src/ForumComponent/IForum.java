@@ -1,6 +1,6 @@
 package ForumComponent;
 
-//hijg my is aaron
+//hijg my is
 
 public interface IForum {
 	
