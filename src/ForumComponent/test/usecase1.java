@@ -61,6 +61,8 @@ public class usecase1 {
 		assertTrue(admin.add_sub_forum("Music" ,  (new String[]{"sapir"})));
 		assertTrue(admin.add_sub_forum("Animals" ,  (new String[]{"yosi"})));
 		
+		
+		//search for diff subforum and open new_thred_on them
 		UserHandler member_1 = (new UserHandler(forum));
 		Vector<SubForum> list_sub = member_1.show_sub_forum();
 		if(list_sub.size()>0){
@@ -70,7 +72,10 @@ public class usecase1 {
 		SubForum sub_animals = member_1.search_subforum("Theme","Animals");
 		SubForum sub_Music = member_1.search_subforum("Moderator","sapir");
 		
+		assertTrue(sub_animals.get_theme().equals("Animals"));
 		
+		assertTrue(sub_Music.get_theme().equals("Music"));
+
 		
 		
 

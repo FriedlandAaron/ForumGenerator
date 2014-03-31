@@ -1,5 +1,7 @@
 package ForumComponent;
 
+import FourmUser.*;
+
 //hijg my is aaron
 
 public interface IForum {

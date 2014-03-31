@@ -105,6 +105,14 @@ public class UserHandler {
 		return true;		
 		
 	}
+	public SubForum search_subforum(String category_search, String search_word) {
+		if(category_search.equals("Theme"))
+			return this._current_user.get_forum().search_subforum_byTheme(search_word);
+		else if (category_search.equals("Moderator"))
+			return this._current_user.get_forum().search_subforum_byModerator(search_word);
+		else
+			return null;
+	}
 
 	
 	

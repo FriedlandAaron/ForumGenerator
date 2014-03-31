@@ -27,5 +27,16 @@ public class SubForum {
 		_threads.add(post);
 		return true;
 	}
+	public String get_theme() {
+		return _theme;
+	}
+
+	public boolean isModerator(String search_word) {
+		for(int i=0 ; i< this._moderators.size();i++)
+			if(this._moderators.get(i).get_username().equals(search_word))
+				return true;
+		return false;
+	}
+
 	
 }

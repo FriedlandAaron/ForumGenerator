@@ -5,7 +5,7 @@ import java.util.Vector;
 import FourmUser.User;
 import FourmUser.User.Status;
 
-public class Forum {
+public class Forum  {
 
 	
 	private Vector<User> _members;
@@ -74,6 +74,22 @@ public class Forum {
 
 	public Vector<SubForum> list_sub_forum() {	
 		return this._subForums;
+	}
+
+
+	public SubForum search_subforum_byTheme(String search_word) {
+		for(int i=0 ; i < this._subForums.size(); i++)
+			if(this._subForums.get(i).get_theme().equals(search_word))
+				return this._subForums.get(i);
+		return null;
+	}
+
+
+	public SubForum search_subforum_byModerator(String search_word) {
+		for(int i=0 ; i < this._subForums.size(); i++)
+			if(this._subForums.get(i).isModerator(search_word))
+				return this._subForums.get(i);
+		return null;
 	}
 
 

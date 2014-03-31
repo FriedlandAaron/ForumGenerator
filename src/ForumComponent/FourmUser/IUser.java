@@ -1,4 +1,6 @@
-package ForumComponent;
+package FourmUser;
+
+import ForumComponent.*;
 
 public interface IUser {
 
