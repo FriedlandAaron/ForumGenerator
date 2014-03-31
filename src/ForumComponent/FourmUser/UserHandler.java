@@ -15,7 +15,7 @@ public class UserHandler {
 
 	public UserHandler(String status ,String username, String password) {
 		if(status != "SUPER_ADMINISTRATOR" ){
-			throw new RuntimeException();
+			throw new RuntimeException("User handler for user other than super administrator must be created with a Forum.");
 		}
 		_current_user = new User(username ,password  , status );
 	} 
@@ -70,7 +70,7 @@ public class UserHandler {
 	}
 	public Forum createForum(Policy p, Vector<String[]> admins) {
 		if(!this._current_user.isUser("SUPER_ADMINISTRATOR"))
-			throw new RuntimeException();
+			throw new RuntimeException("User does not have enough privilages.");
 		 Vector<User> administrators = new Vector<User>();
 		 for(int i =0 ; i< admins.size(); i++){
 			 administrators.add(new User(admins.get(i)[0],
@@ -85,6 +85,8 @@ public class UserHandler {
 	public boolean add_sub_forum(String theme, String[] moderators_names) {
 		Forum forum = this._current_user.get_forum();
 		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR") || this._current_user.isUser("ADMINISTRATOR")) )
+			return false;
+		if(this._current_user.get_forum().search_subforum_byTheme(theme) != null)
 			return false;
 		Vector<User> moderators = new Vector<User>();
 		Vector<Date> moderator_dates = new Vector<Date>();
@@ -102,6 +104,9 @@ public class UserHandler {
 		return this._current_user.get_forum().list_sub_forum();
 	}
 	public boolean create_thread(String header , String body , SubForum subForum ) {
+		if(header == null && body == null)
+			return false;
+		subForum.openThread(new Post(header, body, _current_user, subForum));
 		return true;		
 		
 	}
@@ -112,6 +117,12 @@ public class UserHandler {
 			return this._current_user.get_forum().search_subforum_byModerator(search_word);
 		else
 			return null;
+	}
+	public boolean createReplyPost(String header, String body, Post post) {
+		if(header == null && body == null)
+			return false;
+		post.addReplyPost(new Post(header, body, _current_user, post.get_subForum()));
+		return true;	
 	}
 
 	

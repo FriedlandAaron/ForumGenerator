@@ -89,6 +89,11 @@ public class User {
 			return Status.SUPER_ADMINISTRATOR;
 		return null;
 	}
+	
+	public String get_password() {
+		return _password;
+	}
+
 
 
 

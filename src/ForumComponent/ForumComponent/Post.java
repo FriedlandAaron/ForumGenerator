@@ -42,4 +42,8 @@ public class Post {
 		_replies.add(reply_post);
 	}
 	
+	public SubForum get_subForum() {
+		return _subForum;
+	}
+	
 }

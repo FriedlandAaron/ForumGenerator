@@ -49,7 +49,7 @@ public class usecase1 {
 		
 		
 		UserHandler guest_2 = new UserHandler(forum);
-		assertFalse(guest_2.register("hodamr", "1234321", "1234321"));
+		assertFalse(guest_2.register("hodamr", "4", "4"));
 		assertTrue(guest_2.register("alin", "5fs0d2SW", "5fs0d2SW"));
 		assertTrue(guest_2.register("sapir", "gjkg5Ofjh", "gjkg5Ofjh"));
 		assertTrue(guest_2.register("yosi", "hs5F%4j3h", "hs5F%4j3h"));
@@ -60,6 +60,7 @@ public class usecase1 {
 		assertTrue(admin.add_sub_forum("Sport" , (new String[]{"alin"}) ));
 		assertTrue(admin.add_sub_forum("Music" ,  (new String[]{"sapir"})));
 		assertTrue(admin.add_sub_forum("Animals" ,  (new String[]{"yosi"})));
+		assertFalse(admin.add_sub_forum("Animals" ,  (new String[]{"sapir"})));
 		
 		
 		//search for diff subforum and open new_thred_on them
@@ -76,7 +77,12 @@ public class usecase1 {
 		
 		assertTrue(sub_Music.get_theme().equals("Music"));
 
-		
+		// Adding a reply post to the existing post
+		SubForum sub_sport = member_1.search_subforum("Theme", "Sport");
+		Vector<Post> threads = sub_sport.showThreads();
+		if(threads.size()>0) {
+			assertTrue(member_1.createReplyPost("hahaha", "yadayadayada", threads.get(0)));
+		}
 		
 
 

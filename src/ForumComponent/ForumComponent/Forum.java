@@ -49,7 +49,7 @@ public class Forum  {
 
 	public	boolean isMember(String username ,String password) {
 		for(int i = 0 ; i< _members.size() ; i++){
-			if(_members.get(i).get_username().equals(username))
+			if(_members.get(i).get_username().equals(username) && _members.get(i).get_password().equals(password))
 				return true;
 		}
 		return false;

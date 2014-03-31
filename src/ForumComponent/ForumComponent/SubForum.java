@@ -38,5 +38,9 @@ public class SubForum {
 		return false;
 	}
 
+	public Vector<Post> showThreads() {
+		return _threads;
+	}
+
 	
 }
