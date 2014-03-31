@@ -9,9 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ForumComponent.*;
-import FourmUser.UserHandler;
+import FourmUser.*;
 
-public class usecase1 {
+
+public class integration_test {
 	private Forum forum;
 	private UserHandler super_admin ;
 
@@ -28,7 +29,7 @@ public class usecase1 {
 		admins.add(a1);
 		admins.add(a2);
 		admins.add(a3);		
-		this.forum = super_admin.createForum(p ,admins);		
+		this.forum = super_admin.createForum(p ,admins, "Say");		
 
 	}
 
@@ -73,8 +74,7 @@ public class usecase1 {
 		SubForum sub_animals = member_1.search_subforum("Theme","Animals");
 		SubForum sub_Music = member_1.search_subforum("Moderator","sapir");
 		
-		assertTrue(sub_animals.get_theme().equals("Animals"));
-		
+		assertTrue(sub_animals.get_theme().equals("Animals"));		
 		assertTrue(sub_Music.get_theme().equals("Music"));
 
 		// Adding a reply post to the existing post
@@ -108,7 +108,12 @@ public class usecase1 {
 		 admin.deleteSubForum(sub_Music);
 		 sub_Music = member_1.search_subforum("Theme", "Music");
 		 assertTrue(sub_Music == null);
-
+		 
+		 //add complaint
+		 User moderator = sub_animals.getModerator("yosi");
+		 assertTrue(moderator!=null);
+		 assertTrue(member_1.create_thread("hadar" , "lkjhas" , sub_animals));
+		 assertTrue(member_1.addcomplaintModerator(sub_animals , "yosi" , "theme_complient" , "body_complient"));
 		 
 
 	}

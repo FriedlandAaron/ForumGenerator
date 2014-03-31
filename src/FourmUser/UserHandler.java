@@ -61,7 +61,7 @@ public class UserHandler {
 		
 	}
 	
-	public Forum createForum(Policy p, Vector<String[]> admins) {
+	public Forum createForum(Policy p, Vector<String[]> admins , String theme) {
 		if(!this._current_user.isUser("SUPER_ADMINISTRATOR"))
 			throw new RuntimeException("User does not have enough privilages.");
 		 Vector<User> administrators = new Vector<User>();
@@ -70,7 +70,7 @@ public class UserHandler {
 					 					 admins.get(i)[1] ,
 					 					 "ADMINISTRATOR"));
 		 }
-		 Forum F=  new Forum( p,administrators);
+		 Forum F=  new Forum( p,administrators ,theme);
 		 for(int i =0 ; i< administrators.size(); i++) 
 			 administrators.get(i).set_forum(F);
 		 return F;
@@ -160,6 +160,16 @@ public class UserHandler {
 		f.deleteSubForum(sub_forum);
 		sub_forum.delete();
 		return true;
+	}
+	public boolean addcomplaintModerator(SubForum sub_fourm, String search_word , String theme ,String body ) {
+		 User moderator = sub_fourm.getModerator(search_word);
+		 if(moderator == null)
+			 return false;
+		 if(!this._current_user.isPostedInSubForum(sub_fourm))
+			 return false;	
+		 moderator.add_complaint(new Complaint(this._current_user ,moderator ,theme , body  ));
+		 return true;
+
 	}
 
 	

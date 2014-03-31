@@ -53,6 +53,13 @@ public class SubForum {
 			this._threads.get(i).delete();		
 	}
 
+	public User getModerator(String search_word) {
+		for(int i=0 ; i< this._moderators.size() ; i++)
+			if(this._moderators.get(i).get_username().equals(search_word))
+				return this._moderators.get(i);
+		return null;
+	}
+
 
 
 	

@@ -7,7 +7,7 @@ import FourmUser.User.Status;
 
 public class Forum  {
 
-	
+	private String _theme;
 	private Vector<User> _members;
 	private Vector<User> _banned_members;
 	private Vector<User> _administrators;
@@ -16,8 +16,8 @@ public class Forum  {
 	private Logger _error_logger;
 	private Policy _policy ; 
 
-	public Forum(Policy policy , Vector<User> administrators ){
-		
+	public Forum(Policy policy , Vector<User> administrators  , String theme){
+		this._theme = theme;
 		this._banned_members= new Vector<User>();
 		this._administrators = administrators ;
 		this._subForums = new Vector<SubForum>();
