@@ -87,6 +87,16 @@ public class usecase1 {
 		// Change policy
 		Policy p2 = new Policy();
 		assertTrue(admin.changePolicy(p2));
+		
+		// delete replay post 
+		Vector<Post> member1_ReplyPost =  member_1.show_ReplyPost();
+		if(member1_ReplyPost.size() > 0)
+			member_1.deletePost(member1_ReplyPost.get(0));
+
+		// delete Thread post 
+		Vector<Post> member1_ThreadPost =  member_1.show_TreadPost();
+		if(member1_ReplyPost.size() > 0)
+			member_1.deletePost(member1_ThreadPost.get(0));		
 
 	}
 

@@ -61,13 +61,6 @@ public class UserHandler {
 		
 	}
 	
-	public void addNewPost(SubForum sub_forum, Post post) {
-		sub_forum.openThread(post);
-	}
-	
-	public void addReplyPost(Post reply_post, Post post) {
-		post.addReplyPost(reply_post);
-	}
 	public Forum createForum(Policy p, Vector<String[]> admins) {
 		if(!this._current_user.isUser("SUPER_ADMINISTRATOR"))
 			throw new RuntimeException("User does not have enough privilages.");
@@ -106,9 +99,19 @@ public class UserHandler {
 	public boolean create_thread(String header , String body , SubForum subForum ) {
 		if(header == null && body == null)
 			return false;
-		subForum.openThread(new Post(header, body, _current_user, subForum));
+		Post p = new Post(header, body, _current_user, subForum);
+		subForum.openThread(p);
+		this._current_user.add_thread(p);
 		return true;		
 		
+	}
+	public boolean createReplyPost(String header, String body, Post post) {
+		if(header == null && body == null)
+			return false;
+		Post p = new Post(header, body, _current_user, post.get_subForum());
+		post.addReplyPost(p);
+		this._current_user.add_replyPost(p);
+		return true;	
 	}
 	public SubForum search_subforum(String category_search, String search_word) {
 		if(category_search.equals("Theme"))
@@ -118,18 +121,36 @@ public class UserHandler {
 		else
 			return null;
 	}
-	public boolean createReplyPost(String header, String body, Post post) {
-		if(header == null && body == null)
-			return false;
-		post.addReplyPost(new Post(header, body, _current_user, post.get_subForum()));
-		return true;	
-	}
+
 	public boolean changePolicy(Policy p2) {
 		Forum forum = this._current_user.get_forum();
 		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR") || this._current_user.isUser("ADMINISTRATOR")) )
 			return false;
 		forum.set_policy(p2);
 		return true;
+	}
+	public Vector<Post> show_ReplyPost() {
+		return this._current_user.get_reaplayPosts();
+	}
+	public Vector<Post> show_TreadPost() {
+		return this._current_user.get_threads();
+	}
+	public boolean deletePost(Post post) {
+		boolean has_permition= false;
+		if((this._current_user.isUser("SUPER_ADMINISTRATOR") ||
+				this._current_user.isUser("ADMINISTRATOR"))  )
+			has_permition = true;
+		if(post.get_subForum().isModerator(this._current_user.get_username()))
+			has_permition = true;
+		if(this._current_user.get_username().equals(post.get_author().get_username()))
+			has_permition = true;
+		
+		if(!has_permition )
+			return false;
+				
+		post.delete();
+		return true;
+			
 	}
 
 	

@@ -15,9 +15,8 @@ public class User {
 	private String _username;
 	private String _password;
 	private Forum _forum;
-
-
-	private Vector<Post> _threads;	
+	private Vector<Post> _threads;
+	private Vector<Post> _reaplayPosts; 
 	private Vector<User> _friends;
 	private Date _start_date;
 	private Status _status;	
@@ -27,6 +26,7 @@ public class User {
 		this._username = username ;
 		this._password = password ;
 		this._threads = new Vector<Post>();
+		this._reaplayPosts = new Vector<Post>();
 		this._friends = new Vector<User>();
 		this._start_date= new Date();
 	}
@@ -36,6 +36,7 @@ public class User {
 		this._password = password ;
 		this._forum = forum;
 		this._threads = new Vector<Post>();
+		this._reaplayPosts = new Vector<Post>();
 		this._friends = new Vector<User>();
 		this._start_date= new Date();
 		this._status =convertStringToStatus(status) ;		
@@ -49,6 +50,7 @@ public class User {
 		this._password = "" ;
 		this._forum = forum;
 		this._threads = new Vector<Post>();
+		this._reaplayPosts = new Vector<Post>();
 		this._friends = new Vector<User>();
 		this._start_date= new Date();
 		this._status = Status.GUEST;	
@@ -94,7 +96,32 @@ public class User {
 		return _password;
 	}
 
+	public void add_thread(Post p) {
+		this._threads.add(p);
+	}
 
+	public void add_replyPost(Post p) {
+		this._reaplayPosts.add(p);
+	}
+
+
+	public Vector<Post> get_threads() {
+		return _threads;
+	}
+
+	public Vector<Post> get_reaplayPosts() {
+		return _reaplayPosts;
+	}
+
+	public void deletePost(Post post) {
+		for(int i=0 ; i< this._reaplayPosts.size() ; i++)
+			if(this._reaplayPosts.get(i) == post)
+				this._reaplayPosts.remove(i);
+		for(int i=0 ; i< this._threads.size(); i++ )
+			if(this._threads.get(i) == post)
+				this._threads.remove(i);				
+		
+	}
 
 
 

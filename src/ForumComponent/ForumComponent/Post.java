@@ -46,4 +46,14 @@ public class Post {
 		return _subForum;
 	}
 	
+	public User get_author() {
+		return _author;
+	}
+	public void delete() {
+		for(int i=0; i< this._replies.size() ; i++){
+			this._replies.get(i).delete();
+		}
+		this._author.deletePost(this);
+		this._subForum.deletePost(this);
+	}
 }

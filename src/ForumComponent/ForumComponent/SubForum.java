@@ -42,5 +42,9 @@ public class SubForum {
 		return _threads;
 	}
 
+	public void deletePost(Post post) {
+		
+	}
+
 	
 }
