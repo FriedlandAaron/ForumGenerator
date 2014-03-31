@@ -53,5 +53,6 @@ public class Post {
 		for(int i=0; i< this._replies.size() ; i++){
 			this._replies.get(i).delete();
 		}
+		this._author.deletePost(this);
 	}
 }

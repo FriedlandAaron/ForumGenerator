@@ -106,7 +106,9 @@ public class usecase1 {
 		 
 		 //delete sub forum 
 		 admin.deleteSubForum(sub_Music);
-		 
+		 sub_Music = member_1.search_subforum("Theme", "Music");
+		 assertTrue(sub_Music == null);
+
 		 
 
 	}
