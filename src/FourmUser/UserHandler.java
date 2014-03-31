@@ -147,10 +147,20 @@ public class UserHandler {
 		
 		if(!has_permition )
 			return false;
-				
+		
+		post.get_subForum().deletePost(post);
+		post.get_author().deletePost(post);
 		post.delete();
 		return true;
 			
+	}
+	public boolean deleteSubForum(SubForum sub_forum) {
+		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR") || this._current_user.isUser("ADMINISTRATOR")) )
+			return false;
+		Forum f  = this._current_user.get_forum();
+		f.deleteSubForum(sub_forum);
+		sub_forum.delete();
+		return true;
 	}
 
 	
