@@ -84,7 +84,9 @@ public class usecase1 {
 			assertTrue(member_1.createReplyPost("hahaha", "yadayadayada", threads.get(0)));
 		}
 		
-
+		// Change policy
+		Policy p2 = new Policy();
+		assertTrue(admin.changePolicy(p2));
 
 	}
 

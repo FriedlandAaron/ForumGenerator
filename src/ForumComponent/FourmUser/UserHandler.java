@@ -124,6 +124,13 @@ public class UserHandler {
 		post.addReplyPost(new Post(header, body, _current_user, post.get_subForum()));
 		return true;	
 	}
+	public boolean changePolicy(Policy p2) {
+		Forum forum = this._current_user.get_forum();
+		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR") || this._current_user.isUser("ADMINISTRATOR")) )
+			return false;
+		forum.set_policy(p2);
+		return true;
+	}
 
 	
 	

@@ -16,7 +16,6 @@ public class Forum  {
 	private Logger _error_logger;
 	private Policy _policy ; 
 
-
 	public Forum(Policy policy , Vector<User> administrators ){
 		
 		this._banned_members= new Vector<User>();
@@ -91,10 +90,11 @@ public class Forum  {
 				return this._subForums.get(i);
 		return null;
 	}
-
-
-
 	
 	
+	public void set_policy(Policy _policy) {
+		this._policy = _policy;
+	}
+
 	
 }
