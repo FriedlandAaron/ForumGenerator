@@ -29,7 +29,6 @@ public class usecase1 {
 		admins.add(a2);
 		admins.add(a3);		
 		this.forum = super_admin.createForum(p ,admins);		
-
 	}
 
 	@After
