@@ -105,7 +105,7 @@ public class usecase1 {
 		 assertTrue(member1_ThreadPost.size()==0);
 		 
 		 //delete sub forum 
-		 admin.deleteSubForum(SubForum);
+		 admin.deleteSubForum(sub_Music);
 		 
 		 
 

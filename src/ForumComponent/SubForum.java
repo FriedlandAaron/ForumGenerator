@@ -48,5 +48,17 @@ public class SubForum {
 				this._threads.remove(i);	
 	}
 
+	public void delete() {
+		int n= this._threads.size();
+		while(n-->0){
+			this._threads.get(0).delete();
+		}
+		if(this._threads.size()!=0)
+			throw new RuntimeException();
+		
+	}
+
+
+
 	
 }

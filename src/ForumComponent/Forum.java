@@ -96,5 +96,12 @@ public class Forum  {
 		this._policy = _policy;
 	}
 
+
+	public void deleteSubForum(SubForum sub_forum) {
+		for(int i=0 ; i<this._subForums.size() ; i++)
+			if( this._subForums.get(i)==sub_forum)
+				this._subForums.remove(i);
+	}
+
 	
 }
