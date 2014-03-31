@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import ForumComponent.Forum;
 import ForumComponent.Post;
+import ForumComponent.SubForum;
 
 
 public class User {
@@ -18,6 +19,7 @@ public class User {
 	private Vector<Post> _threads;
 	private Vector<Post> _reaplayPosts; 
 	private Vector<User> _friends;
+	private Vector<Complaint> _complaints;
 	private Date _start_date;
 	private Status _status;	
 
@@ -28,6 +30,7 @@ public class User {
 		this._threads = new Vector<Post>();
 		this._reaplayPosts = new Vector<Post>();
 		this._friends = new Vector<User>();
+		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 	}
 
@@ -38,6 +41,7 @@ public class User {
 		this._threads = new Vector<Post>();
 		this._reaplayPosts = new Vector<Post>();
 		this._friends = new Vector<User>();
+		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 		this._status =convertStringToStatus(status) ;		
 	}
@@ -52,6 +56,7 @@ public class User {
 		this._threads = new Vector<Post>();
 		this._reaplayPosts = new Vector<Post>();
 		this._friends = new Vector<User>();
+		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 		this._status = Status.GUEST;	
 	}
@@ -120,6 +125,21 @@ public class User {
 		for(int i=0 ; i< this._threads.size(); i++ )
 			if(this._threads.get(i) == post)
 				this._threads.remove(i);				
+		
+	}
+
+	public boolean isPostedInSubForum(SubForum sub_fourm) {
+		for(int i = 0 ; i< this._threads.size(); i++)
+			if(this._threads.get(i).get_subForum()==sub_fourm)
+				return true;
+		for(int i = 0 ; i< this._reaplayPosts.size(); i++)
+			if(this._reaplayPosts.get(i).get_subForum()==sub_fourm)
+				return true;
+		return false;
+	}
+
+	public void add_complaint(Complaint complaint) {
+		this._complaints.add(complaint);
 		
 	}
 
