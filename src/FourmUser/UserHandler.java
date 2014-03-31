@@ -148,8 +148,7 @@ public class UserHandler {
 		if(!has_permition )
 			return false;
 		
-		post.get_subForum().deletePost(post);
-		post.get_author().deletePost(post);
+		post.get_subForum().deletePost(post); // will delete if a thread
 		post.delete();
 		return true;
 			
