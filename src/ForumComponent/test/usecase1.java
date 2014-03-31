@@ -22,6 +22,7 @@ public class usecase1 {
 		
 		//create forum
 
+		
 		Policy p = new Policy();
 		Vector<String[]> admins = new  Vector<String[]>(); 
 		String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
