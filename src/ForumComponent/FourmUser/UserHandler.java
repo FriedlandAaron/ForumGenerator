@@ -82,7 +82,7 @@ public class UserHandler {
 			 administrators.get(i).set_forum(F);
 		 return F;
 	}
-	public boolean add_sub_forum(String theme, String[] moderators_names) {
+	public boolean createSubForum(String theme, String[] moderators_names) {
 		Forum forum = this._current_user.get_forum();
 		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR") || this._current_user.isUser("ADMINISTRATOR")) )
 			return false;

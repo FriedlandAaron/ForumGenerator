@@ -57,10 +57,10 @@ public class usecase1 {
 		//addnig several sub-fourm by admins only
 		UserHandler admin = new UserHandler(forum);
 		assertTrue(admin.login("bobi_1", "kikdoskd"));
-		assertTrue(admin.add_sub_forum("Sport" , (new String[]{"alin"}) ));
-		assertTrue(admin.add_sub_forum("Music" ,  (new String[]{"sapir"})));
-		assertTrue(admin.add_sub_forum("Animals" ,  (new String[]{"yosi"})));
-		assertFalse(admin.add_sub_forum("Animals" ,  (new String[]{"sapir"})));
+		assertTrue(admin.createSubForum("Sport" , (new String[]{"alin"}) ));
+		assertTrue(admin.createSubForum("Music" ,  (new String[]{"sapir"})));
+		assertTrue(admin.createSubForum("Animals" ,  (new String[]{"yosi"})));
+		assertFalse(admin.createSubForum("Animals" ,  (new String[]{"sapir"})));
 		
 		
 		//search for diff subforum and open new_thred_on them
