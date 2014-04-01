@@ -14,27 +14,30 @@ public class SubForum {
 	private Vector<Post> _threads;
 	private Vector<Post> _posts_pending;
 	
-	public SubForum(String theme, Vector<User> moderators, Vector<Date> moderator_dates){
-		this._theme=theme;
-		this._moderators= moderators;
+	public SubForum(String theme, Vector<User> moderators, Vector<Date> moderator_dates) {
+		this._theme = theme;
+		this._moderators = moderators;
 		this._moderator_dates = moderator_dates;
-		this._suspended_moderators= new Vector<User>();
-		this._threads= new Vector<Post>();
-		this._posts_pending = new Vector<Post>();		
+		this._suspended_moderators = new Vector<User>();
+		this._threads = new Vector<Post>();
+		this._posts_pending = new Vector<Post>();
 	}
 	
 	public boolean openThread(Post post) {
 		_threads.add(post);
 		return true;
 	}
+	
 	public String get_theme() {
 		return _theme;
 	}
 
-	public boolean isModerator(String search_word) {
-		for(int i=0 ; i< this._moderators.size();i++)
-			if(this._moderators.get(i).get_username().equals(search_word))
+	public boolean isModerator(String modName) {
+		for(int i = 0 ; i < this._moderators.size(); i++) {
+			if(this._moderators.get(i).get_username().equals(modName)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -43,21 +46,26 @@ public class SubForum {
 	}
 
 	public void deletePost(Post post) {
-		for(int i=0 ; i< this._threads.size(); i++ )
-			if(this._threads.get(i) == post)
-				this._threads.remove(i);	
+		for(int i = 0 ; i < this._threads.size(); i++) {
+			if(this._threads.get(i) == post) {
+				this._threads.remove(i);
+			}
+		}
 	}
 
 	public void delete() {
-		for(int i =0 ; i<this._threads.size();i++)
+		for(int i = 0; i < this._threads.size(); i++) {
 			this._threads.get(i).delete();
+		}
 		this._threads.removeAllElements();
 	}
 
-	public User getModerator(String search_word) {
-		for(int i=0 ; i< this._moderators.size() ; i++)
-			if(this._moderators.get(i).get_username().equals(search_word))
+	public User getModerator(String modName) {
+		for(int i = 0; i < this._moderators.size(); i++) {
+			if(this._moderators.get(i).get_username().equals(modName)) {
 				return this._moderators.get(i);
+			}
+		}
 		return null;
 	}
 	
@@ -76,8 +84,5 @@ public class SubForum {
 	public Vector<Post> get_posts_pending() {
 		return _posts_pending;
 	}
-
-
-
 	
 }

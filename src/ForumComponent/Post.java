@@ -15,27 +15,24 @@ public class Post {
 	private Date _date;
 	private SubForum _subForum;
 
-	public Post(String header , String body ,User author , SubForum subForum  ){
-		this._header = header ; 
-		this._body = body ; 
-		this._author = author ; 
-		this._subForum = subForum ; 
-		
-		this._parent_post = null;		
-		this._date =new Date() ;
-		this._replies = new Vector<Post>() ;
-		
+	public Post(String header, String body, User author, SubForum subForum) {
+		this._header = header;
+		this._body = body;
+		this._author = author;
+		this._subForum = subForum;	
+		this._parent_post = null;
+		this._date = new Date();
+		this._replies = new Vector<Post>();
 	}
-	public Post(String header , String body ,User author , SubForum subForum ,  Post parent_post ){
-		this._header = header ; 
-		this._body = body ; 
-		this._author = author ; 
-		this._subForum = subForum ; 
+	
+	public Post(String header, String body, User author, SubForum subForum, Post parent_post) {
+		this._header = header;
+		this._body = body;
+		this._author = author;
+		this._subForum = subForum;
 		this._parent_post = parent_post;
-		
-		this._date =new Date() ;
-		this._replies = new Vector<Post>() ;
-		
+		this._date = new Date();
+		this._replies = new Vector<Post>();		
 	}
 	
 	public void addReplyPost(Post reply_post) {
@@ -60,4 +57,5 @@ public class Post {
 		}
 		this._author.deletePost(this);
 	}
+	
 }
