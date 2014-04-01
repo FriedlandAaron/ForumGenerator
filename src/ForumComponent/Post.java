@@ -49,6 +49,11 @@ public class Post {
 	public User get_author() {
 		return _author;
 	}
+	
+	public Vector<Post> get_replies() {
+		return _replies;
+	}
+	
 	public void delete() {
 		for(int i=0; i< this._replies.size() ; i++){
 			this._replies.get(i).delete();

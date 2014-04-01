@@ -50,7 +50,8 @@ public class SubForum {
 
 	public void delete() {
 		for(int i =0 ; i<this._threads.size();i++)
-			this._threads.get(i).delete();		
+			this._threads.get(i).delete();
+		this._threads.removeAllElements();
 	}
 
 	public User getModerator(String search_word) {
@@ -58,6 +59,22 @@ public class SubForum {
 			if(this._moderators.get(i).get_username().equals(search_word))
 				return this._moderators.get(i);
 		return null;
+	}
+	
+	public Vector<User> get_moderators() {
+		return _moderators;
+	}
+
+	public Vector<Date> get_moderator_dates() {
+		return _moderator_dates;
+	}
+
+	public Vector<User> get_suspended_moderators() {
+		return _suspended_moderators;
+	}
+
+	public Vector<Post> get_posts_pending() {
+		return _posts_pending;
 	}
 
 
