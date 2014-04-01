@@ -44,8 +44,8 @@ public class UserHandler {
 				|| (!password.equals(repeated_password))) {
 			return false;
 		}
-		
-		this._current_user.get_forum().addMember_Email(username ,password ,email );
+		Forum f = this._current_user.get_forum();
+		f.get_mailHandler().send_massage("Welcome to the Forum: \""+f.get_theme()+"\"", "To finish the registration process, please reply to this e-mail.");
 		return true;
 	}
 	
@@ -180,6 +180,23 @@ public class UserHandler {
 		 moderator.add_complaint(new Complaint(this._current_user ,moderator ,theme , body  ));
 		 return true;
 
+	}
+	public boolean addMemberType(String type , Forum forum) {
+		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR")))
+				return false;
+		forum.addMemberType(type);
+		return true;
+	}
+	public boolean removeMemberType(String type, Forum forum) {
+		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR")))
+			return false;
+		forum.removeMemberType(type);
+		return true;
+	}
+	public int getNumberOfMemberTypes(Forum forum) {
+		if(!(this._current_user.isUser("SUPER_ADMINISTRATOR")))
+			return 0;
+		return forum.getNumberOfTypes();
 	}
 
 	
