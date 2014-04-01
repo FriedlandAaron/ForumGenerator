@@ -6,6 +6,7 @@ import java.util.Vector;
 import ForumComponent.Forum;
 import ForumComponent.Post;
 import ForumComponent.SubForum;
+import ForumComponent.MemberType;
 
 
 public class User {
@@ -22,7 +23,8 @@ public class User {
 	private Vector<Complaint> _complaints;
 	private Date _start_date;
 	private Status _status;	
-	private String email; 
+	private String _email; 
+	private MemberType _type;
 
 	public User(String username, String password ,String status ) {
 		this._status = convertStringToStatus(status) ;
@@ -33,7 +35,7 @@ public class User {
 		this._friends = new Vector<User>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
-		this.email = "";
+		this._email = "";
 	}
 	public User(Forum forum ,String username, String password ,String status ) {
 		this._username = username ;
@@ -45,7 +47,9 @@ public class User {
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 		this._status =convertStringToStatus(status) ;	
-		this.email = "";
+		this._email = "";
+		this._type = this._forum.getMemberTypeByName("Default");
+		
 		
 	}
 
@@ -59,7 +63,8 @@ public class User {
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 		this._status =convertStringToStatus(status) ;	
-		this.email = email;
+		this._email = email;
+		this._type = this._forum.getMemberTypeByName("Default");
 		
 	}
 	
@@ -76,11 +81,15 @@ public class User {
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 		this._status = Status.GUEST;	
-		this.email = "";
+		this._email = "";
+		this._type = this._forum.getMemberTypeByName("Default");
 
 	}
 	
 
+	public void set_type(MemberType _type) {
+		this._type = _type;
+	}
 	public String get_username() {
 		return _username;
 	}

@@ -19,8 +19,7 @@ public class MailHandler implements MessageCountListener {
     	_mail.close_Store();    	
     }
     
-    
-    
+        
     public static void main(String args[]) throws Exception{
     	MailHandler my_mailHandler = new MailHandler("ForumGeneratorWSEP142@gmail.com", "MiraBalaban");
     	my_mailHandler.init_Mail_Handler();    	 

@@ -8,6 +8,7 @@ import FourmUser.*;
 public class Forum  {
 
 	private String _theme;
+
 	private Vector<User> _members;
 	private Vector<User> _banned_members;
 	private Vector<User> _administrators;
@@ -16,7 +17,8 @@ public class Forum  {
 	private Logger _error_logger;
 	private Policy _policy ; 
 	private MailHandler _mailHandler ; 
-
+	private Vector<MemberType> _memberTypes;
+	
 	public Forum(Policy policy , Vector<User> administrators  , String theme){
 		this._theme = theme;
 		this._banned_members= new Vector<User>();
@@ -30,6 +32,8 @@ public class Forum  {
 			this._members.add(this._administrators.get(i));
 		}
 		this._mailHandler = new MailHandler("ForumGeneratorWSEP142@gmail.com", "MiraBalaban");
+		this._memberTypes = new Vector<MemberType>();
+		this._memberTypes.add(new MemberType("Default"));
 	}
 
 
@@ -38,12 +42,14 @@ public class Forum  {
 		 _members.add(new User(this,  username,  password , "MEMBER"));
 	}
 	
-	public void addMember_Email(String username, String password, String email) {
-		User new_user = new User(this,  username,  password , "MEMBER" , email);
-		 _members.add(new_user);
-		 
+	public String get_theme() {
+		return _theme;
 	}
-	
+
+
+	public MailHandler get_mailHandler() {
+		return _mailHandler;
+	}
 
 
 	public	boolean isMember(String username) {
@@ -117,6 +123,39 @@ public class Forum  {
 	public void close_Forum(){
 		this._mailHandler.close_Mail_Handler();
 		
+	}
+	
+	public void addMemberType(String name) {
+		_memberTypes.add(new MemberType(name));
+	}
+	public MemberType getMemberTypeByName(String name) {
+		for(int i = 0; i < this._memberTypes.size(); i++) {
+			if(this._memberTypes.get(i).get_typeName().equals(name))
+				return this._memberTypes.get(i);
+		}
+		return null;
+	}
+	public void removeMemberType(String name){
+		MemberType m = null;
+		for(int i = 0; i < this._memberTypes.size(); i++) {
+			if(this._memberTypes.get(i).get_typeName().equals(name) && i != 0){
+				m = this._memberTypes.get(i);
+				this._memberTypes.remove(i);
+				break;
+			}
+		}
+		if(m!= null){
+			for(int i=0 ; i< this._members.size() ; i++)
+				this._members.get(i).set_type(this._memberTypes.get(0));
+			for(int i=0 ; i< this._banned_members.size() ; i++)
+				this._banned_members.get(i).set_type(this._memberTypes.get(0));
+			for(int i=0 ; i< this._administrators.size() ; i++)
+				this._administrators.get(i).set_type(this._memberTypes.get(0));
+		}		
+	}
+	
+	public int getNumberOfTypes(){
+		return this._memberTypes.size();
 	}
 
 	

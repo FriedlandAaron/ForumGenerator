@@ -115,6 +115,33 @@ public class integration_test {
 		 assertTrue(member_1.create_thread("hadar" , "lkjhas" , sub_animals));
 		 assertTrue(member_1.addcomplaintModerator(sub_animals , "yosi" , "theme_complient" , "body_complient"));
 		 
+		 
+		 // Registration by e-mail
+		 
+			 UserHandler guest_5 = new UserHandler(forum);
+			 assertTrue(guest_2.register_Email("hadaramran_ghgd", "hhhhhhhh","hhhhhhhh", "email"));
+			 
+			 // Imitate guest 5 response e-mail
+			 
+			 
+			 // Check for new messages and ouptut all users that are waiting for registration
+			 
+			 
+			 
+		// Add member types
+		assertTrue(this.super_admin.addMemberType("Gold" , this.forum));
+		assertTrue(this.super_admin.addMemberType("Silver" ,this.forum));
+		assertTrue(this.super_admin.addMemberType("Bronze" ,this.forum));
+		assertFalse(admin.addMemberType("Platinum" ,this.forum));
+		assertFalse(member_1.addMemberType("Platinum" ,this.forum));
+		
+		// Remove member types
+		assertTrue(this.super_admin.removeMemberType("Bronze", this.forum));
+		assertFalse(admin.removeMemberType("Silver", this.forum));
+		
+		// Check number of member types in forum
+		assertTrue(this.super_admin.getNumberOfMemberTypes(forum) == 3);
+		assertFalse(admin.getNumberOfMemberTypes(forum) == 3);
 
 	}
 
