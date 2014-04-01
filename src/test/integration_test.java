@@ -50,7 +50,7 @@ public class integration_test {
 		
 		
 		UserHandler guest_2 = new UserHandler(forum);
-		assertFalse(guest_2.register("hodamr", "4", "4" ));
+		assertFalse(guest_2.register("hodamr", "4", "4"));
 		assertTrue(guest_2.register("alin", "5fs0d2SW", "5fs0d2SW"));
 		assertTrue(guest_2.register("sapir", "gjkg5Ofjh", "gjkg5Ofjh"));
 		assertTrue(guest_2.register("yosi", "hs5F%4j3h", "hs5F%4j3h"));
