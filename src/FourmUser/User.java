@@ -22,6 +22,7 @@ public class User {
 	private Vector<Complaint> _complaints;
 	private Date _start_date;
 	private Status _status;	
+	private String email; 
 
 	public User(String username, String password ,String status ) {
 		this._status = convertStringToStatus(status) ;
@@ -32,8 +33,8 @@ public class User {
 		this._friends = new Vector<User>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
+		this.email = "";
 	}
-
 	public User(Forum forum ,String username, String password ,String status ) {
 		this._username = username ;
 		this._password = password ;
@@ -43,7 +44,23 @@ public class User {
 		this._friends = new Vector<User>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
-		this._status =convertStringToStatus(status) ;		
+		this._status =convertStringToStatus(status) ;	
+		this.email = "";
+		
+	}
+
+	public User(Forum forum ,String username, String password ,String status  , String email) {
+		this._username = username ;
+		this._password = password ;
+		this._forum = forum;
+		this._threads = new Vector<Post>();
+		this._reaplayPosts = new Vector<Post>();
+		this._friends = new Vector<User>();
+		this._complaints = new Vector<Complaint>();
+		this._start_date= new Date();
+		this._status =convertStringToStatus(status) ;	
+		this.email = email;
+		
 	}
 	
 
@@ -59,6 +76,8 @@ public class User {
 		this._complaints = new Vector<Complaint>();
 		this._start_date= new Date();
 		this._status = Status.GUEST;	
+		this.email = "";
+
 	}
 	
 

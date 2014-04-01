@@ -2,8 +2,8 @@ package ForumComponent;
 
 import java.util.Vector;
 
-import FourmUser.User;
-import FourmUser.User.Status;
+import FourmMail.*;
+import FourmUser.*;
 
 public class Forum  {
 
@@ -15,6 +15,7 @@ public class Forum  {
 	private Logger _action_logger;
 	private Logger _error_logger;
 	private Policy _policy ; 
+	private MailHandler _mailHandler ; 
 
 	public Forum(Policy policy , Vector<User> administrators  , String theme){
 		this._theme = theme;
@@ -28,12 +29,19 @@ public class Forum  {
 		for(int i=0 ; i < this._administrators.size() ; i++){
 			this._members.add(this._administrators.get(i));
 		}
+		this._mailHandler = new MailHandler("ForumGeneratorWSEP142@gmail.com", "MiraBalaban");
 	}
 
 
 //----------------------------------------------------------------------------------
 	public void addMember(String username, String password) {
 		 _members.add(new User(this,  username,  password , "MEMBER"));
+	}
+	
+	public void addMember_Email(String username, String password, String email) {
+		User new_user = new User(this,  username,  password , "MEMBER" , email);
+		 _members.add(new_user);
+		 
 	}
 	
 
@@ -101,6 +109,14 @@ public class Forum  {
 		for(int i=0 ; i<this._subForums.size() ; i++)
 			if( this._subForums.get(i)==sub_forum)
 				this._subForums.remove(i);
+	}
+	
+	public void init_Forum(){
+		this._mailHandler.init_Mail_Handler();
+	}
+	public void close_Forum(){
+		this._mailHandler.close_Mail_Handler();
+		
 	}
 
 	

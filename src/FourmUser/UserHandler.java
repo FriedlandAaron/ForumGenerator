@@ -39,6 +39,16 @@ public class UserHandler {
 		return true;
 	}
 	
+	public boolean register_Email(String username, String password, String repeated_password , String email) {
+		if(this._current_user.get_forum().isMember(username)
+				|| (!password.equals(repeated_password))) {
+			return false;
+		}
+		
+		this._current_user.get_forum().addMember_Email(username ,password ,email );
+		return true;
+	}
+	
 	public boolean login(String username, String password) {
 		if(!_current_user.isUser("GUEST")){
 			return false;
