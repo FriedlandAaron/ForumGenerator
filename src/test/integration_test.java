@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.Scanner;
 import java.util.Vector;
 
 import org.junit.After;
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ForumComponent.*;
+import FourmMail.Mail;
 import FourmUser.*;
 
 
@@ -29,12 +31,14 @@ public class integration_test {
 		admins.add(a1);
 		admins.add(a2);
 		admins.add(a3);		
-		this.forum = super_admin.createForum(p ,admins, "Say");		
+		this.forum = super_admin.createForum(p ,admins, "Say");
+		this.forum.init_Forum();
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		this.forum.close_Forum();
 	}
 
 	@Test
@@ -101,7 +105,6 @@ public class integration_test {
 			assertTrue(member_1.deletePost(member1_ThreadPost.get(0)));		
 		
 		 member1_ThreadPost =  member_1.show_TreadPost();
-		 System.out.println(member1_ThreadPost.size());
 		 assertTrue(member1_ThreadPost.size()==0);
 		 
 		 //delete sub forum 
@@ -119,13 +122,26 @@ public class integration_test {
 		 // Registration by e-mail
 		 
 			 UserHandler guest_5 = new UserHandler(forum);
-			 assertTrue(guest_2.register_Email("hadaramran_ghgd", "hhhhhhhh","hhhhhhhh", "email"));
+			 assertTrue(guest_5.register_Email("hadaramran_ghgd", "hhhhhhhh","hhhhhhhh", "ForumGeneratorWSEP142Test1@gmail.com"));
 			 
-			 // Imitate guest 5 response e-mail
-			 
-			 
-			 // Check for new messages and ouptut all users that are waiting for registration
-			 
+			// Imitate guest 5 response e-mail
+				 Mail guest_5_email =new Mail("ForumGeneratorWSEP142Test1@gmail.com", "MiraBalaban" , null);
+				 guest_5_email.open_Store();
+				 try {
+					assertTrue(guest_5_email.send(new String[]{"ForumGeneratorWSEP142@gmail.com"}, "highfoeum", "ajgdjagdjgas"));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 guest_5_email.close_Store();
+				 
+				 
+				//create the Scanner
+				 Scanner terminalInput = new Scanner(System.in);				 
+				  terminalInput.nextLine();				 
+				this.forum.checkValidationEmails();
+				assertTrue(this.forum.isMember("hadaramran_ghgd"));
+			
 			 
 			 
 		// Add member types
@@ -142,6 +158,7 @@ public class integration_test {
 		// Check number of member types in forum
 		assertTrue(this.super_admin.getNumberOfMemberTypes(forum) == 3);
 		assertFalse(admin.getNumberOfMemberTypes(forum) == 3);
+		
 
 	}
 

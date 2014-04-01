@@ -2,6 +2,8 @@ package ForumComponent;
 
 import java.util.Vector;
 
+import javax.mail.Address;
+
 import FourmMail.*;
 import FourmUser.*;
 
@@ -18,6 +20,7 @@ public class Forum  {
 	private Policy _policy ; 
 	private MailHandler _mailHandler ; 
 	private Vector<MemberType> _memberTypes;
+	private Vector<String[]> _waitingList;
 	
 	public Forum(Policy policy , Vector<User> administrators  , String theme){
 		this._theme = theme;
@@ -34,6 +37,7 @@ public class Forum  {
 		this._mailHandler = new MailHandler("ForumGeneratorWSEP142@gmail.com", "MiraBalaban");
 		this._memberTypes = new Vector<MemberType>();
 		this._memberTypes.add(new MemberType("Default"));
+		this._waitingList = new Vector<String[]>();
 	}
 
 
@@ -156,6 +160,30 @@ public class Forum  {
 	
 	public int getNumberOfTypes(){
 		return this._memberTypes.size();
+	}
+
+
+	public void add_to_waitingList(String username, String password,String email) {
+		this._waitingList.add(new String[]{username ,password,email });
+
+
+	}
+
+
+	public void checkValidationEmails() {		
+		Vector<String> msg_senders =this._mailHandler.getEmailsSenders();
+		for(String sender_email:msg_senders){
+//			System.out.println(sender_email);
+			for(String[] user : this._waitingList){
+				if(sender_email.equals(user[2]));
+					this.addMemberEmail(user[0], user[1] , user[2]);
+			}
+		}
+	}
+
+
+	private void addMemberEmail(String username, String password, String email) {
+		 _members.add(new User(this,  username,  password , "MEMBER" ,email));		
 	}
 
 	

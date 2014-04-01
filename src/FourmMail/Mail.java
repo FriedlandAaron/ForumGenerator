@@ -51,6 +51,7 @@ public class Mail extends javax.mail.Authenticator {
 	private IMAPFolder  _folder;
 	private Thread _listening_emails;
 	private MailHandler _mailHandler;
+	private boolean _isclose;
 	public Mail()
 	 {
 		 _host = "smtp.gmail.com"; // default smtp server
@@ -81,6 +82,7 @@ public class Mail extends javax.mail.Authenticator {
 		 mc.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822");
 		 CommandMap.setDefaultCommandMap(mc);
 	 }
+
  
 	public Mail(String user, String pass ,  MailHandler mailHandler)
 	 {
@@ -89,6 +91,7 @@ public class Mail extends javax.mail.Authenticator {
 		_user = user;
 		_pass = pass;
 		_from = user;
+		this._isclose = false;
 	 }
 
 	public void open_Store(){
@@ -110,37 +113,39 @@ public class Mail extends javax.mail.Authenticator {
 			 // get inbox folder
 			_folder = (IMAPFolder) _imapStore.getFolder("inbox");
 			_folder.open(Folder.READ_WRITE);
-			
-			_folder.addMessageCountListener(this._mailHandler); 
+			if(_mailHandler!=null){
+				_folder.addMessageCountListener(this._mailHandler); 
+			}
+			this._isclose = true;
 	        
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		 
-		
+		}		
 	}
 	public void close_Store(){
-		
+			this._isclose = false;
 			try {
 				if(_listening_emails!=null){
-					_listening_emails.stop();
+					_listening_emails.interrupt();
 					_listening_emails=null;
+				}
+				if(_folder!=null){
+					_folder.close(true);
+					_folder=null;
 				}
 
 				if(_imapStore!=null){
 					_imapStore.close();
 					_imapStore=null;
 				}
-				if(_imapStore!=null){
-					_folder.close(true);
-					_folder=null;
-				}
 
 			} catch (MessagingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+
 		
 	}
  
@@ -148,14 +153,12 @@ public class Mail extends javax.mail.Authenticator {
 	 {		 
 		if(_folder==null || _session == null || _imapStore==null)
 			return false;
-		 		 
 		if (!_user.equals("") && !_pass.equals("") && _to.length > 0
 		 && !_from.equals("") && !_subject.equals("")
 		 && !_body.equals(""))
 		 {			
 			MimeMessage msg = new MimeMessage(_session);
 			msg.setFrom(new InternetAddress(_from));
-			 
 			InternetAddress[] addressTo = new InternetAddress[_to.length];
 			 for (int i = 0; i < _to.length; i++)			 
 				 addressTo[i] = new InternetAddress(_to[i]);
@@ -244,13 +247,12 @@ public class Mail extends javax.mail.Authenticator {
 		
 		 if(_folder==null || _session == null || _imapStore==null)
 			 return;
-		 
 		 _listening_emails = new Thread(new Runnable() {
 
 	            public void run() {
 	                try {
-	                    while (true) {
-	                        _folder.idle();
+	                    while (_isclose) {
+	                        _folder.idle(false);
 	                    }
 	                } catch (MessagingException ex) {
 	                    //Handling exception goes here

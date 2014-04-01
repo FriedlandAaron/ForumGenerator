@@ -44,9 +44,12 @@ public class UserHandler {
 				|| (!password.equals(repeated_password))) {
 			return false;
 		}
+		
 		Forum f = this._current_user.get_forum();
-		f.get_mailHandler().send_massage("Welcome to the Forum: \""+f.get_theme()+"\"", "To finish the registration process, please reply to this e-mail.");
-		return true;
+		f.add_to_waitingList(username , password ,email );
+		String[] to = new String[1];
+		to[0] = email;		
+		return f.get_mailHandler().send_massage(to , "Welcome to the Forum: \""+f.get_theme()+"\"", "To finish the registration process, please reply to this e-mail.");
 	}
 	
 	public boolean login(String username, String password) {
