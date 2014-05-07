@@ -19,19 +19,21 @@ public class integration_test_2 {
 
 	@Before
 	public void setUp() throws Exception {
-		//create superadmin
-		this.super_admin = new UserHandler("SUPER_ADMINISTRATOR" , "hadaramran" , "12374567");
-		
-		//create forum
+		//create forum components
 
 		Policy p = new Policy();
 		Vector<String[]> admins = new  Vector<String[]>(); 
 		String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
 		admins.add(a1);
 		admins.add(a2);
-		admins.add(a3);		
-		this.forum = super_admin.createForum(p ,admins, "Say");
+		admins.add(a3);	
+		
+		//create forum		
+		this.forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");	
+		this.super_admin = new UserHandler(forum);
+		this.super_admin.login( "hadaramran",  "12374567");
 		this.forum.init_Forum();
+
 
 	}
 

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import Domain_layer.ForumComponent.*;
+import Domain_layer.FourmUser.User.Status;
 
 public interface IUser {
 
@@ -30,6 +31,7 @@ public interface IUser {
 	public Date get_start_date() ;
 	public String get_email();
 	public MemberType get_type();
+	public Status getStatus();
 	
 	
 	

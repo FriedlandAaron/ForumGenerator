@@ -14,10 +14,9 @@ import Domain_layer.FourmUser.User.Status;
 
 public interface IUserHandler {
 	public boolean register(String username, String password, String repeated_password) ;
-	public boolean register_Email(String username, String password, String repeated_password , String email);
+//	public boolean register_Email(String username, String password, String repeated_password , String email);
 	public boolean login(String username, String password);
 	public boolean logout();
-	public IForum createForum(IPolicy p1, Vector<String[]> admins , String theme) ;
 	public boolean createSubForum(String theme, String[] moderators_names);
 	public Vector<ISubForum> show_sub_forum();
 	public boolean create_thread(String header , String body , ISubForum subForum );
@@ -47,5 +46,17 @@ public interface IUserHandler {
 	public String get_email();
 	public MemberType get_type() ;
 	public IUser get_current_user();
+	
+	//--------GUI----------
+	public Status getUserStatus();
+	
+	
+	
+	
+	
+
+
+	
+	
 	
 }

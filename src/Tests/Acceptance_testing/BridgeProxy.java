@@ -61,13 +61,11 @@ public class BridgeProxy implements BridgeForum {
 
 	public IForum openNewForum(Member m, String theme,Vector<Member> admin, Tests.Acceptance_testing.Policy p) {
 		if (m.get_Type() == MemberType.SUPERADMIN){
-			Service_Layer.IUserHandler super_admin = new Service_Layer.UserHandler("SUPER_ADMINISTRATOR" , m.get_name() , m.get_password());
 			IPolicy p1 = null;
 			Vector<String[]> admins = new  Vector<String[]>(); 
 			for(int i=0 ; i< admin.size(); i++)
-				admins.add(new String[]{admin.get(i).get_name(), admin.get(i).get_password()});
-		
-			return super_admin.createForum(p1, admins, theme);
+				admins.add(new String[]{admin.get(i).get_name(), admin.get(i).get_password()});		
+			return Forum.createForum( m.get_name(), m.get_password(), p1, admins, theme);
 			}
 		else return null;
 	}

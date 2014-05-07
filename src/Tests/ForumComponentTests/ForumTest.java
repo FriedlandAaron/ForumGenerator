@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Domain_layer.ForumComponent.Forum;
+import Domain_layer.ForumComponent.IForum;
 import Domain_layer.ForumComponent.ISubForum;
 import Domain_layer.ForumComponent.Policy;
 import Domain_layer.ForumComponent.SubForum;
@@ -19,6 +20,25 @@ import Domain_layer.FourmUser.User;
 public class ForumTest {
 	private Forum forum;
 
+	
+	@Test
+	public void testCreateForum() {
+		//create forum
+		Policy p = new Policy();
+		Vector<String[]> admins = new  Vector<String[]>(); 
+		String[] a1 = {"hadar_1" , "ssdasda"} , a2 =  {"hadar_2" , "05402sda"}  , a3  = {"hadar_3" , "ADAS45"};
+		admins.add(a1);
+		admins.add(a2);
+		admins.add(a3);		
+		IForum forum =Forum.createForum("hadaramran", "123456789", p ,admins, "Say");
+		assertTrue(forum.get_theme().equals("Say"));
+		assertTrue(forum.get_administrators().size() == 4);
+		assertTrue(forum.get_administrators().get(1).get_username().equals("hadar_1") ||
+					forum.get_administrators().get(1).get_username().equals("hadar_2") ||
+					forum.get_administrators().get(1).get_username().equals("hadar_3") );
+		assertTrue(forum.get_policy() == p);
+	}
+	
 	@Before
 	public void setUp() throws Exception {
 		Policy p = new Policy();
@@ -33,6 +53,8 @@ public class ForumTest {
 					 					 admins.get(i)[1] ,
 					 					 "ADMINISTRATOR"));
 		 }
+		 
+		 administrators.add(new User("hadar" , "hghgsajh" ,"SUPER_ADMINISTRATOR" ));
 		this.forum = new Forum(p ,administrators , "TEST_FORUM" );
 		
 	}
@@ -50,7 +72,6 @@ public class ForumTest {
 
 	@Test
 	public void testIsMemberString() {
-		assertFalse(this.forum.isMember("hadar") );
 		assertTrue(this.forum.isMember("admin_1") );
 		assertTrue(this.forum.isMember("admin_2") );
 		assertTrue(this.forum.isMember("admin_3") );
@@ -93,7 +114,7 @@ public class ForumTest {
 		assertTrue(this.forum.search_subforum_byModerator("hadar") == sub);
 		assertTrue(this.forum.search_subforum_byModerator("hod") == sub);
 		assertTrue(this.forum.search_subforum_byTheme("Music") == sub);
-		assertTrue(this.forum.list_sub_forum().contains(sub));		
+		assertTrue(this.forum.show_sub_forum().contains(sub));		
 
 
 	}
@@ -115,11 +136,11 @@ public class ForumTest {
 
 		this.forum.addSubForum(sub_1);
 		this.forum.addSubForum(sub_2);		
-		assertTrue(this.forum.list_sub_forum().contains(sub_1));
-		assertTrue(this.forum.list_sub_forum().contains(sub_2));
+		assertTrue(this.forum.show_sub_forum().contains(sub_1));
+		assertTrue(this.forum.show_sub_forum().contains(sub_2));
 		this.forum.deleteSubForum(sub_1);
-		assertFalse(this.forum.list_sub_forum().contains(sub_1));
-		assertTrue(this.forum.list_sub_forum().contains(sub_2));
+		assertFalse(this.forum.show_sub_forum().contains(sub_1));
+		assertTrue(this.forum.show_sub_forum().contains(sub_2));
 
 	}
 	@Test
@@ -237,40 +258,41 @@ public class ForumTest {
 
 		this.forum.addSubForum(sub_1);
 		this.forum.addSubForum(sub_2);		
-		assertTrue(this.forum.list_sub_forum().contains(sub_1));
-		assertTrue(this.forum.list_sub_forum().contains(sub_2));
+		assertTrue(this.forum.show_sub_forum().contains(sub_1));
+		assertTrue(this.forum.show_sub_forum().contains(sub_2));
 		this.forum.deleteSubForum(sub_1);
-		assertFalse(this.forum.list_sub_forum().contains(sub_1));
-		assertTrue(this.forum.list_sub_forum().contains(sub_2));
+		assertFalse(this.forum.show_sub_forum().contains(sub_1));
+		assertTrue(this.forum.show_sub_forum().contains(sub_2));
 		this.forum.deleteSubForum(sub_2);
-		assertFalse(this.forum.list_sub_forum().contains(sub_2));
+		assertFalse(this.forum.show_sub_forum().contains(sub_2));
 
 	}
 
 	@Test
 	public void testAddMemberType() {
+		IUser u = this.forum.getMember("hadar");
 		assertTrue(this.forum.getMemberTypeByName("Default")!= null);
-		assertEquals(this.forum.getNumberOfTypes() , 1);
+		assertEquals(this.forum.getNumberOfTypes(u) , 1);
 
-		this.forum.addMemberType("RED");
-		assertEquals(this.forum.getNumberOfTypes() , 2);
+		this.forum.addMemberType(u,"RED");
+		assertEquals(this.forum.getNumberOfTypes(u) , 2);
 		assertEquals(this.forum.getMemberTypeByName("RED").get_typeName() , "RED");
 		
 		assertTrue(this.forum.getMemberTypeByName("GREEN")== null);
 
 
-		this.forum.addMemberType("GREEN");
+		this.forum.addMemberType(u, "GREEN");
 		assertTrue(this.forum.getMemberTypeByName("GREEN")!= null);
 		assertEquals(this.forum.getMemberTypeByName("GREEN").get_typeName() , "GREEN");
 
 
-		this.forum.addMemberType("BLACK");	
+		this.forum.addMemberType(u , "BLACK");	
 		
-		assertEquals(this.forum.getNumberOfTypes() , 4);
+		assertEquals(this.forum.getNumberOfTypes(u) , 4);
 
-		this.forum.addMemberType("GRAY");
+		this.forum.addMemberType(u,"GRAY");
 		
-		assertEquals(this.forum.getNumberOfTypes() , 5);
+		assertEquals(this.forum.getNumberOfTypes(u) , 5);
 
 		assertEquals(this.forum.getMemberTypeByName("BLACK").get_typeName() , "BLACK");
 		
@@ -280,26 +302,28 @@ public class ForumTest {
 
 	@Test
 	public void testGetMemberTypeByName() {
+		IUser u = this.forum.getMember("hadar");
+
 		assertTrue(this.forum.getMemberTypeByName("Default")!= null);
-		assertEquals(this.forum.getNumberOfTypes() , 1);
+		assertEquals(this.forum.getNumberOfTypes(u) , 1);
 		assertEquals(this.forum.getMemberTypeByName("Default").get_typeName() , "Default");
 		
-		this.forum.addMemberType("RED");
-		this.forum.addMemberType("GREEN");
-		this.forum.addMemberType("BLACK");	
-		this.forum.addMemberType("GRAY");
+		this.forum.addMemberType(u,"RED");
+		this.forum.addMemberType(u,"GREEN");
+		this.forum.addMemberType(u,"BLACK");	
+		this.forum.addMemberType(u,"GRAY");
 		
 		
-		assertEquals(this.forum.getNumberOfTypes() , 5);
+		assertEquals(this.forum.getNumberOfTypes(u) , 5);
 		assertEquals(this.forum.getMemberTypeByName("BLACK").get_typeName() , "BLACK");
 		assertEquals(this.forum.getMemberTypeByName("GREEN").get_typeName() , "GREEN");
 		assertEquals(this.forum.getMemberTypeByName("GRAY").get_typeName() , "GRAY");
-		this.forum.removeMemberType("RED");
+		this.forum.removeMemberType(u,"RED");
 		assertTrue(this.forum.getMemberTypeByName("RED")== null);
-		assertEquals(this.forum.getNumberOfTypes() , 4);
-		this.forum.removeMemberType("BLACK");
-		this.forum.removeMemberType("GREEN");
-		this.forum.removeMemberType("GRAY");
+		assertEquals(this.forum.getNumberOfTypes(u) , 4);
+		this.forum.removeMemberType(u,"BLACK");
+		this.forum.removeMemberType(u,"GREEN");
+		this.forum.removeMemberType(u,"GRAY");
 		assertTrue(this.forum.getMemberTypeByName("BLACK")== null);
 		assertTrue(this.forum.getMemberTypeByName("GREEN")== null);
 		assertTrue(this.forum.getMemberTypeByName("GRAY")== null);	
@@ -308,26 +332,28 @@ public class ForumTest {
 
 	@Test
 	public void testRemoveMemberType() {
-		this.forum.addMemberType("RED");
-		this.forum.addMemberType("GREEN");
-		this.forum.addMemberType("BLACK");	
-		this.forum.addMemberType("GRAY");
+		IUser u = this.forum.getMember("hadar");
+
+		this.forum.addMemberType(u,"RED");
+		this.forum.addMemberType(u,"GREEN");
+		this.forum.addMemberType(u,"BLACK");	
+		this.forum.addMemberType(u,"GRAY");
 		
-		this.forum.removeMemberType("BLACK");
-		this.forum.removeMemberType("GREEN");
-		this.forum.removeMemberType("GRAY");
-		assertEquals(this.forum.getNumberOfTypes() , 2);
+		this.forum.removeMemberType(u,"BLACK");
+		this.forum.removeMemberType(u,"GREEN");
+		this.forum.removeMemberType(u,"GRAY");
+		assertEquals(this.forum.getNumberOfTypes(u) , 2);
 
 		assertTrue(this.forum.getMemberTypeByName("BLACK")== null);
 		assertTrue(this.forum.getMemberTypeByName("GREEN")== null);
 		assertTrue(this.forum.getMemberTypeByName("GRAY")== null);	
-		this.forum.removeMemberType("Default");
-		assertEquals(this.forum.getNumberOfTypes() , 2);
+		this.forum.removeMemberType(u,"Default");
+		assertEquals(this.forum.getNumberOfTypes(u) , 2);
 		assertTrue(this.forum.getMemberTypeByName("Default")!= null);
 		assertTrue(this.forum.getMemberTypeByName("RED")!= null);
 
-		this.forum.removeMemberType("RED");
-		assertEquals(this.forum.getNumberOfTypes() , 1);
+		this.forum.removeMemberType(u,"RED");
+		assertEquals(this.forum.getNumberOfTypes(u) , 1);
 
 		assertTrue(this.forum.getMemberTypeByName("RED")== null);	
 		
@@ -335,24 +361,26 @@ public class ForumTest {
 
 	@Test
 	public void testGetNumberOfTypes() {
-		assertEquals(this.forum.getNumberOfTypes() , 1);
+		IUser u = this.forum.getMember("hadar");
 
-		this.forum.addMemberType("RED");
-		assertEquals(this.forum.getNumberOfTypes() , 2);
+		assertEquals(this.forum.getNumberOfTypes(u) , 1);
 
-		this.forum.addMemberType("GREEN");
-		this.forum.addMemberType("BLACK");	
-		this.forum.addMemberType("GRAY");
-		assertEquals(this.forum.getNumberOfTypes() , 5);
+		this.forum.addMemberType(u,"RED");
+		assertEquals(this.forum.getNumberOfTypes(u) , 2);
+
+		this.forum.addMemberType(u,"GREEN");
+		this.forum.addMemberType(u,"BLACK");	
+		this.forum.addMemberType(u,"GRAY");
+		assertEquals(this.forum.getNumberOfTypes(u) , 5);
 
 		
-		this.forum.removeMemberType("BLACK");
-		this.forum.removeMemberType("GREEN");
-		this.forum.removeMemberType("GRAY");
-		assertEquals(this.forum.getNumberOfTypes() , 2);
-		this.forum.removeMemberType("Default");
-		this.forum.removeMemberType("RED");
-		assertEquals(this.forum.getNumberOfTypes() , 1);
+		this.forum.removeMemberType(u,"BLACK");
+		this.forum.removeMemberType(u,"GREEN");
+		this.forum.removeMemberType(u,"GRAY");
+		assertEquals(this.forum.getNumberOfTypes(u) , 2);
+		this.forum.removeMemberType(u,"Default");
+		this.forum.removeMemberType(u,"RED");
+		assertEquals(this.forum.getNumberOfTypes(u) , 1);
 
 	}
 

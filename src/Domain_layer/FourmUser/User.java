@@ -206,6 +206,10 @@ public class User implements IUser {
 		return _type;
 	}
 
+	public Status getStatus() {
+		return this._status;
+	}
+
 
 	
 	

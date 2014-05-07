@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Domain_layer.ForumComponent.Forum;
 import Domain_layer.ForumComponent.IForum;
 import Domain_layer.ForumComponent.IPost;
 import Domain_layer.ForumComponent.ISubForum;
@@ -26,15 +27,20 @@ public class UserHandlerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//create superadmin
-		this.super_admin = new UserHandler("SUPER_ADMINISTRATOR" , "hadaramran" , "12374567");
+
 		
-		//create forum
+		//create forum components
 		Policy p = new Policy();
 		Vector<String[]> admins = new  Vector<String[]>(); 
 		String[] a1 = {"hadar_1" , "ssdasda"} , a2 =  {"hadar_2" , "05402sda"}  , a3  = {"hadar_3" , "ADAS45"};
 		admins.add(a1);	admins.add(a2);	admins.add(a3);		
-		IForum forum = super_admin.createForum(p ,admins, "Cat");
+		
+		//create forum
+
+		IForum forum =Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");		
+		this.super_admin = new UserHandler(forum);
+		this.super_admin.login( "hadaramran",  "12374567");
+		
 		this.member_1 = new UserHandler(forum);
 		this.member_2 = new UserHandler(forum);
 		this.member_3 = new UserHandler(forum);
@@ -97,23 +103,7 @@ public class UserHandlerTest {
 
 	}
 
-	@Test
-	public void testCreateForum() {
-		//create forum
-		Policy p = new Policy();
-		Vector<String[]> admins = new  Vector<String[]>(); 
-		String[] a1 = {"hadar_1" , "ssdasda"} , a2 =  {"hadar_2" , "05402sda"}  , a3  = {"hadar_3" , "ADAS45"};
-		admins.add(a1);
-		admins.add(a2);
-		admins.add(a3);		
-		IForum forum = super_admin.createForum(p ,admins, "Say");
-		assertTrue(forum.get_theme().equals("Say"));
-		assertTrue(forum.get_administrators().size() == 3);
-		assertTrue(forum.get_administrators().get(0).get_username().equals("hadar_1") ||
-					forum.get_administrators().get(0).get_username().equals("hadar_2") ||
-					forum.get_administrators().get(0).get_username().equals("hadar_3") );
-		assertTrue(forum.get_policy() == p);
-	}
+
 
 	@Test
 	public void testCreateSubForum() {
