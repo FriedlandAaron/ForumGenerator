@@ -9,10 +9,22 @@ import Domain_layer.ForumComponent.ISubForum;
 import Domain_layer.ForumComponent.MemberType;
 
 
-public class User implements IUser {
+@SuppressWarnings("serial")
+public class User implements IUser  , java.io.Serializable{
+
 	
 	public enum Status {
-	    GUEST, MEMBER, ADMINISTRATOR, SUPER_ADMINISTRATOR
+		GUEST(0), 
+		MEMBER(1),
+		ADMINISTRATOR(2),
+		SUPER_ADMINISTRATOR(3);
+
+	    private int numVal;
+	    Status(int numVal) { this.numVal = numVal;  }
+	    private int getNumVal() {   return numVal;  }
+	    public boolean has_permission(Status status){
+	    	return 	this.getNumVal()<=  status.getNumVal();   	
+	    }	    
 	}
 	
 	private String _username;
@@ -27,8 +39,8 @@ public class User implements IUser {
 	private String _email;
 	private MemberType _type;
 
-	public User(String username, String password, String status) {
-		this._status = convertStringToStatus(status);
+	public User(String username, String password, Status status) {
+		this._status = status;
 		this._username = username;
 		this._password = password;
 		this._threads = new Vector<IPost>();
@@ -39,7 +51,7 @@ public class User implements IUser {
 		this._email = "";
 	}
 	
-	public User(IForum forum, String username, String password, String status) {
+	public User(IForum forum, String username, String password, Status status) {
 		this._username = username;
 		this._password = password;
 		this._forum = forum;
@@ -48,12 +60,12 @@ public class User implements IUser {
 		this._friends = new Vector<IUser>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date = new Date();
-		this._status =convertStringToStatus(status);
+		this._status =status;
 		this._email = "";
 		this._type = this._forum.getMemberTypeByName("Default");
 	}
 
-	public User(IForum forum, String username, String password, String status, String email) {
+	public User(IForum forum, String username, String password, Status status, String email) {
 		this._username = username;
 		this._password = password;
 		this._forum = forum;
@@ -62,7 +74,7 @@ public class User implements IUser {
 		this._friends = new Vector<IUser>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date = new Date();
-		this._status = convertStringToStatus(status);
+		this._status = status;
 		this._email = email;
 		this._type = this._forum.getMemberTypeByName("Default");		
 	}
@@ -102,27 +114,7 @@ public class User implements IUser {
 	public void set_forum(IForum _forum) {
 		this._forum = _forum;
 	}
-	
-	public boolean isUser(String status) {
-		return convertStringToStatus(status)== this._status;
-	}
-	
-	private Status convertStringToStatus(String status) {
-		if(status.equals("GUEST")) {
-			return Status.GUEST;
-		}
-		if(status.equals("MEMBER")) {
-			return Status.MEMBER;
-		}
-		if(status.equals("ADMINISTRATOR")) {
-			return Status.ADMINISTRATOR;
-		}
-		if(status.equals("SUPER_ADMINISTRATOR")) {
-			return Status.SUPER_ADMINISTRATOR;
-		}
-		return null;
-	}
-	
+		
 	public String get_password() {
 		return _password;
 	}
@@ -147,12 +139,12 @@ public class User implements IUser {
 
 	public void deletePost(IPost post) {
 		for(int i = 0; i < this._replyPosts.size(); i++) {
-			if(this._replyPosts.get(i) == post) {
+			if(this._replyPosts.get(i).get_id()==post.get_id()) {
 				this._replyPosts.remove(i);
 			}
 		}
 		for(int i = 0; i < this._threads.size(); i++) {
-			if(this._threads.get(i) == post) {
+			if(this._threads.get(i).get_id()==post.get_id()) {
 				this._threads.remove(i);
 			}
 		}
@@ -208,6 +200,11 @@ public class User implements IUser {
 
 	public Status getStatus() {
 		return this._status;
+	}
+
+	@Override
+	public int numPostsUser() {
+		return this._replyPosts.size()+this._threads.size();
 	}
 
 

@@ -23,7 +23,8 @@ import javax.mail.internet.MimeMultipart;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 
-public class Mail extends javax.mail.Authenticator implements IMail  {
+@SuppressWarnings("serial")
+public class Mail extends javax.mail.Authenticator implements IMail  , java.io.Serializable  {
 	private String _user;
 	private String _pass;
  

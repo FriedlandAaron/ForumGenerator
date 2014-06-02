@@ -60,8 +60,8 @@ public class UserHandlerTest {
 		assertFalse(this.member_4.register("hagfshgds", "asd", "asd"));
 		
 		
-		assertTrue(this.member_1.register("2", "ahsfdhgsvahd", "ahsfdhgsvahd"));
-		assertTrue(this.member_2.register("4", "1s31dsa", "1s31dsa"));
+		assertTrue(this.member_1.register("2", "ahsfdhgsvcahd", "ahsfdhgsvcahd"));
+		assertTrue(this.member_2.register("4", "ggggg", "ggggg"));
 		
 		
 	}
@@ -107,9 +107,9 @@ public class UserHandlerTest {
 
 	@Test
 	public void testCreateSubForum() {
-		this.member_3.register("alin", "jahsgd", "jahsgd");
-		this.member_3.register("sapir", "jahsgd", "jahsgd");
-		this.member_3.register("yosi", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "mimi", "mimi");
+		this.member_3.register("sapir", "33333", "33333");
+		this.member_3.register("yosi", "wqdfsdsd", "wqdfsdsd");
 
 
 		this.member_1.login("hadar_1", "ssdasda");
@@ -122,9 +122,9 @@ public class UserHandlerTest {
 
 	@Test
 	public void testDeleteSubForum() {
-		this.member_3.register("alin", "jahsgd", "jahsgd");
-		this.member_3.register("sapir", "jahsgd", "jahsgd");
-		this.member_3.register("yosi", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "mimi", "mimi");
+		this.member_3.register("sapir", "33333", "33333");
+		this.member_3.register("yosi", "wqdfsdsd", "wqdfsdsd");
 
 
 		this.member_1.login("hadar_1", "ssdasda");
@@ -144,9 +144,9 @@ public class UserHandlerTest {
 
 	@Test
 	public void testShow_sub_forum() {
-		this.member_3.register("alin", "jahsgd", "jahsgd");
-		this.member_3.register("sapir", "jahsgd", "jahsgd");
-		this.member_3.register("yosi", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "mimi", "mimi");
+		this.member_3.register("sapir", "33333", "33333");
+		this.member_3.register("yosi", "wqdfsdsd", "wqdfsdsd");
 
 
 		this.member_1.login("hadar_1", "ssdasda");
@@ -170,9 +170,9 @@ public class UserHandlerTest {
 
 	@Test
 	public void testSearch_subforum() {
-		this.member_3.register("alin", "jahsgd", "jahsgd");
-		this.member_3.register("sapir", "jahsgd", "jahsgd");
-		this.member_3.register("yosi", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "mimi", "mimi");
+		this.member_3.register("sapir", "33333", "33333");
+		this.member_3.register("yosi", "wqdfsdsd", "wqdfsdsd");
 
 
 		this.member_1.login("hadar_1", "ssdasda");
@@ -206,7 +206,7 @@ public class UserHandlerTest {
 	
 	@Test
 	public void testCreate_thread() {
-		this.member_3.register("alin", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "jjjjjjj", "jjjjjjj");
 		this.member_1.login("hadar_1", "ssdasda");		
 		this.member_1.createSubForum("Sport" , (new String[]{"alin"}) );
 		assertTrue(this.member_4.create_thread("sjhgdjahs", "ashgd", this.member_4.search_subforum("Theme", "Sport")));
@@ -232,7 +232,7 @@ public class UserHandlerTest {
 		this.member_1.login("hadar_1", "ssdasda");		
 		this.member_1.createSubForum("Music" , (new String[]{"alin"}) );
 
-		this.member_3.register("alin", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "vvv", "vvv");
 		this.member_1.login("hadar_1", "ssdasda");		
 		this.member_1.createSubForum("Sport" , (new String[]{"alin"}) );
 		this.member_4.create_thread("sjhgdjahs", "ashgd", this.member_4.search_subforum("Theme", "Sport"));
@@ -271,11 +271,10 @@ public class UserHandlerTest {
 		this.member_1.login("hadar_1", "ssdasda");		
 		this.member_1.createSubForum("Music" , (new String[]{"alin"}) );
 
-		this.member_3.register("alin", "jahsgd", "jahsgd");
+		this.member_3.register("alin", "mccccc", "mccccc");
 		this.member_1.login("hadar_1", "ssdasda");		
 		this.member_1.createSubForum("Sport" , (new String[]{"alin"}) );
 		this.member_4.create_thread("sjhgdjahs", "ashgd", this.member_4.search_subforum("Theme", "Sport"));
-		this.member_4.create_thread("sjhgdjahs", "ashgd", this.member_4.search_subforum("Theme", ""));
 		
 		ISubForum sub_sport = member_1.search_subforum("Theme", "Sport");
 		Vector<IPost> threads = sub_sport.showThreads();		
@@ -300,7 +299,7 @@ public class UserHandlerTest {
 
 	@Test
 	public void testAddcomplaintModerator() {
-		this.member_3.register("yosi", "jahsgd", "jahsgd");
+		this.member_3.register("yosi", "123", "123");
 		this.member_1.login("hadar_1", "ssdasda");		
 		this.member_1.createSubForum("Animals" , (new String[]{"yosi"}) );
 		ISubForum sub_animals = member_1.search_subforum("Theme", "Animals");		 
@@ -314,13 +313,13 @@ public class UserHandlerTest {
 	@Test
 	public void testAddMemberType() {
 		// Add member types
-		assertTrue(this.super_admin.addMemberType("Gold" , this.member_1.get_current_user().get_forum()));
-		assertTrue(this.super_admin.addMemberType("Silver" ,this.member_3.get_current_user().get_forum()));
-		assertTrue(this.super_admin.addMemberType("Bronze" ,this.member_2.get_current_user().get_forum()));
+		assertTrue(this.super_admin.addMemberType("Gold"));
+		assertTrue(this.super_admin.addMemberType("Silver"));
+		assertTrue(this.super_admin.addMemberType("Bronze"));
 		UserHandler admin = new UserHandler(this.member_1.get_current_user().get_forum());
 		admin.login("hadar_2" , "05402sda");
-		assertFalse(admin.addMemberType("Platinum" ,this.member_2.get_current_user().get_forum()));
-		assertFalse(member_1.addMemberType("Platinum" ,this.member_2.get_current_user().get_forum()));
+		assertFalse(admin.addMemberType("Platinum"));
+		assertFalse(member_1.addMemberType("Platinum"));
 		
 	
 	}
@@ -328,35 +327,33 @@ public class UserHandlerTest {
 	@Test
 	public void testRemoveMemberType() {
 		// Add member types
-		assertTrue(this.super_admin.addMemberType("Gold" , this.member_1.get_current_user().get_forum()));
-		assertTrue(this.super_admin.addMemberType("Silver" ,this.member_3.get_current_user().get_forum()));
-		assertTrue(this.super_admin.addMemberType("Bronze" ,this.member_2.get_current_user().get_forum()));
+		assertTrue(this.super_admin.addMemberType("Gold"));
+		assertTrue(this.super_admin.addMemberType("Silver"));
+		assertTrue(this.super_admin.addMemberType("Bronze"));
 		
 		UserHandler admin = new UserHandler(this.member_1.get_current_user().get_forum());
 		admin.login("hadar_2" , "05402sda");
 		
 		// Remove member types
-		assertTrue(this.super_admin.removeMemberType("Bronze", this.member_2.get_current_user().get_forum()));
-		assertFalse(admin.removeMemberType("Silver", this.member_2.get_current_user().get_forum()));
-		
-	
+		assertTrue(this.super_admin.removeMemberType("Bronze"));
+		assertFalse(admin.removeMemberType("Silver"));
 	}
 
 	@Test
 	public void testGetNumberOfMemberTypes() {
 		// Add member types
-		assertTrue(this.super_admin.addMemberType("Gold" , this.member_1.get_current_user().get_forum()));
-		assertTrue(this.super_admin.addMemberType("Silver" ,this.member_3.get_current_user().get_forum()));
-		assertTrue(this.super_admin.addMemberType("Bronze" ,this.member_2.get_current_user().get_forum()));
+		assertTrue(this.super_admin.addMemberType("Gold"));
+		assertTrue(this.super_admin.addMemberType("Silver"));
+		assertTrue(this.super_admin.addMemberType("Bronze"));
 		UserHandler admin = new UserHandler(this.member_1.get_current_user().get_forum());
 		admin.login("hadar_2" , "05402sda");
 		
 		// Remove member types
-		assertTrue(this.super_admin.removeMemberType("Bronze", this.member_2.get_current_user().get_forum()));
+		assertTrue(this.super_admin.removeMemberType("Bronze"));
 		
 		// Check number of member types in forum
-		assertTrue(this.super_admin.getNumberOfMemberTypes(this.member_2.get_current_user().get_forum()) == 3);
-		assertFalse(admin.getNumberOfMemberTypes(this.member_2.get_current_user().get_forum()) == 3);
+		assertTrue(this.super_admin.getNumberOfMemberTypes() == 3);
+		assertFalse(admin.getNumberOfMemberTypes() == 3);
 	}
 
 }

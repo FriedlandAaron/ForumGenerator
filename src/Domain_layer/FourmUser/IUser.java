@@ -14,7 +14,6 @@ public interface IUser {
 	public void set_username(String _username);
 	public void set_password(String _password);
 	public void set_forum(IForum _forum);
-	public boolean isUser(String status) ;
 	public String get_password() ;
 	public void add_thread(IPost p);
 	public void add_replyPost(IPost p);
@@ -32,6 +31,7 @@ public interface IUser {
 	public String get_email();
 	public MemberType get_type();
 	public Status getStatus();
+	public int numPostsUser();
 	
 	
 	

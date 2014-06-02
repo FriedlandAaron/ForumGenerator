@@ -6,27 +6,23 @@ package forumgui;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import Domain_layer.FourmUser.User.Status;
+
 /**
  *
  * @author ocoh
  */
 public class MainForumPage extends javax.swing.JFrame {
-
+    Status userStatus;
+    String userName;
     /**
      * Creates new form MainForumPage
      */
-    public MainForumPage() {
-        initComponents();
-        list1.add("subforum1");
-        list1.add("subforum2");
-        list1.add("subforum3");
-        list1.add("subforum4");
-        list1.add("subforum5");
-        list1.add("subforum6");
-        list1.add("subforum7");
-        list1.add("subforum8");
-        list1.add("subforum9");
-        list1.add("subforum10");
+    public MainForumPage(Status userStatus, String username) {
+        this.userStatus = userStatus;
+        this.userName = username;
+    	initComponents();
+        
     }
 
     /**
@@ -163,7 +159,12 @@ public class MainForumPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       list1.add("oren");
+       if (userStatus== Status.ADMINISTRATOR)
+       {
+    	   if (MainMenu._userHandler.createSubForum("sport", (new String[]{})))
+    		   list1.add("sport");
+    	   
+       }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -183,7 +184,7 @@ public class MainForumPage extends javax.swing.JFrame {
          for (int i=0; i < list1.getItemCount(); i++){
             if (list2.isIndexSelected(i)){
                 setVisible(false);
-                new SubForumPage(list2.getItem(i)).setVisible(true);}
+                new SubForumPage(list2.getItem(i),userStatus,userName).setVisible(true);}
         }
     }//GEN-LAST:event_list2ActionPerformed
 
@@ -220,11 +221,11 @@ public class MainForumPage extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainForumPage().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new MainForumPage().setVisible(true);
+//            }
+//        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

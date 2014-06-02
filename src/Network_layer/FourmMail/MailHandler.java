@@ -7,7 +7,8 @@ import javax.mail.event.MessageCountListener;
 
 import Domain_layer.ForumComponent.Forum;
 
-public class MailHandler implements MessageCountListener , IMailHandler {
+@SuppressWarnings("serial")
+public class MailHandler implements MessageCountListener , IMailHandler  , java.io.Serializable {
 	private Mail _mail;
 	private Forum forum;
 	public MailHandler(String mail,String pass){

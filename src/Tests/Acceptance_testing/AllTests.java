@@ -10,9 +10,9 @@ public class AllTests {
         suite.addTest( new TestSuite(TestAdmin.class));
         suite.addTest(new TestSuite(TestMember.class));
         suite.addTest(new TestSuite(TestGuest.class));
-        //suite.addTest(new TestSuite(databaseTesting.class));
-       // suite.addTest(new TestSuite(clientTesting.class));
-        //suite.addTest(new TestSuite(serverTesting.class));
+//        suite.addTest(new TestSuite(databaseTesting.class));
+        suite.addTest(new TestSuite(clientTesting.class));
+//        suite.addTest(new TestSuite(serverTesting.class));
         
 
         return suite;

@@ -4,16 +4,23 @@
  */
 package forumgui;
 
+import Domain_layer.FourmUser.User.Status;
+
 /**
  *
  * @author ocoh
  */
 public class PostPage extends javax.swing.JFrame {
-
+    Status userStatus;
+    String userName;
+    String context;
     /**
      * Creates new form PostPage
      */
-    public PostPage() {
+    public PostPage(Status userStatus, String username, String context) {
+        this.userStatus = userStatus;
+        this.userName = username;
+        this.context=context;
         initComponents();
     }
 
@@ -45,6 +52,7 @@ public class PostPage extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setText(context);
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel1.setText("Post Context:");
@@ -52,6 +60,11 @@ public class PostPage extends javax.swing.JFrame {
         jLabel2.setText("Replys:");
 
         jButton1.setText("Add A Reply");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Delete A Reply");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -139,13 +152,18 @@ public class PostPage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       // MainMenu._userHandler.createReplyPost(header, body, post)
+    	
+    	list1.add("ooooo" + " by :" + userName);
+    }//GEN-LAST:event_jButton2ActionPerformed
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         setVisible(false);
-        new SubForumPage("last subject").setVisible(true);
+        //new SubForumPage("last subject").setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -180,11 +198,11 @@ public class PostPage extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PostPage().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new PostPage().setVisible(true);
+//            }
+//        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -25,5 +25,8 @@ public interface IPost {
 	public IPost get_parent_post();
 
 	public Date get_date();
+	
+	public int get_id();
+	public int numDescendants();
 
 }

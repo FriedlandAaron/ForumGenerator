@@ -18,6 +18,8 @@ public class ForumTest extends TestCase{
 
 		
 	}
+    
+    
 
 	private void setUpMembers() {
    	//	for(String[] userInfo : DBData.users) {

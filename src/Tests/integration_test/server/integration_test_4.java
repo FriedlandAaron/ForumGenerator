@@ -1,4 +1,4 @@
-package Tests.integration_test;
+package Tests.integration_test.server;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +30,7 @@ public class integration_test_4 {
 		this.forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");	
 		this.super_admin = new UserHandler(forum);
 		this.super_admin.login( "hadaramran",  "12374567");
-		this.forum.init_Forum();
+		//this.forum.init_Forum();
 
 		
 		UserHandler guest_1 = new UserHandler(forum);
@@ -51,7 +51,7 @@ public class integration_test_4 {
 
 	@After
 	public void tearDown() throws Exception {
-		this.forum.close_Forum();
+		//this.forum.close_Forum();
 	}
 
 	@Test

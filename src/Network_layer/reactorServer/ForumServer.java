@@ -30,7 +30,6 @@ public class ForumServer {
 			
 			//create forum		
 			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
-
 			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
 			Thread thread = new Thread(reactor);
 			thread.start();			

@@ -1,4 +1,4 @@
-package Tests.integration_test;
+package Tests.integration_test.server;
 
 import static org.junit.Assert.*;
 
@@ -32,14 +32,13 @@ public class integration_test_3 {
 		this.forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");	
 		this.super_admin = new UserHandler(forum);
 		this.super_admin.login( "hadaramran",  "12374567");
-		this.forum.init_Forum();
-
+		//this.forum.init_Forum();
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		this.forum.close_Forum();
+		//this.forum.close_Forum();
 	}
 
 	@Test
@@ -47,9 +46,9 @@ public class integration_test_3 {
 
 		UserHandler guest_1 = new UserHandler(forum);
 
-		guest_1.register("alin", "1234321", "1234321");
-		guest_1.register("sapir", "1234321", "1234321");
-		guest_1.register("yosi", "1234321", "1234321");
+		assertTrue(guest_1.register("alin", "1234321", "1234321"));
+		assertTrue(guest_1.register("sapir", "lllll", "lllll"));
+		assertTrue(guest_1.register("yosi", "mkn", "mkn"));
 		
 		//addnig several sub-fourm by admins only
 		UserHandler admin = new UserHandler(forum);

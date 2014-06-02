@@ -7,10 +7,14 @@ public class ForumMessage implements Message<ForumMessage>, java.io.Serializable
 
 	public enum ForumMessageType  {	COMMAND ,REPLY ,CLOSE}
 	public interface ForumMessageMinorType{};
-	public enum ForumMessageReturnType  implements ForumMessageMinorType  {ERROR , BOOLEAN  };
-	public enum ForumMessageCommendType implements ForumMessageMinorType {LOGIN , LOGOUT};
-
-
+	public enum ForumMessageReturnType  implements ForumMessageMinorType  {ERROR , BOOLEAN, VEC_ISUBFORUM, ISUBFORUM, VEC_IPOST, INTEGER, 
+																			STRING, IFORUM, VEC_IUSER, VEC_COMP, STARTDATE, STATUS, MEMBERTYPE, IUSER  };
+																			
+	public enum ForumMessageCommendType implements ForumMessageMinorType {LOGIN , LOGOUT, REGISTER, CR_SUBFORUM, SH_SUBFORUM, CR_THREAD, CR_REPLYPOST, SEARCH_SUBFORUM, 
+																			CHAN_POLICY, SH_REPLYPOST, SH_THREADPOST, DELETE_POST, DELETE_SUBFORUM, ADD_COMP_MOD, ADD_MEMBER_TYPE, 
+																			REM_MEMBER_TYPE, GET_NUM_MEMBER_TYPE, GET_THREADS, GET_REPLYPOST, GET_PASS, GET_USERNAME, GET_FORUM, 
+																			GET_FRIENDS, GET_COMP, GET_STARTDATE, GET_STATUS, GET_EMAIL, GET_TYPE, GET_CUR_USR,
+																			ADD_MODERATOR, DEL_MODERATOR, NUM_SUBFORUM, NUM_SHARED_MOD, NUM_POSTS_SUBFORUM, NUM_POSTS_USER, MODERATORS_LIST, MODERATORS_REPORT, SET_METHOD_POLICY};
 
 	private static final long serialVersionUID = 1L;	 
 	private  ForumMessageType type;

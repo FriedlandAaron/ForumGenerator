@@ -1,12 +1,19 @@
 package Domain_layer.ForumComponent;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
 import Domain_layer.FourmUser.IUser;
 
-public class Post implements IPost {
-
+@SuppressWarnings("serial")
+public class Post implements IPost  , java.io.Serializable {
+	
+    private static int counter = 0;
+    private static ArrayList<IPost> instanses = new   ArrayList<IPost>() ;
+    public  static IPost getIPost(long id){return Post.instanses.get((int) id); }
+    
+	private int _id;
 	private String _header;
 	private String _body;
 	private Vector<IPost> _replies;
@@ -15,17 +22,31 @@ public class Post implements IPost {
 	private Date _date;
 	private ISubForum _subForum;
 
-	public Post(String header, String body, IUser author, ISubForum subForum) {
+	public static Post create_post(String header, String body, IUser author, ISubForum subForum){
+		Post p =new  Post(header , body , author ,subForum  );
+		Post.instanses.add(p);
+		return p;
+	}
+	
+	public static Post create_post(String header, String body, IUser author, ISubForum subForum , IPost parent_post){
+		Post p =new  Post(header , body , author ,subForum, parent_post  );
+		Post.instanses.add(p);
+		return p;
+	}
+
+	private Post(String header, String body, IUser author, ISubForum subForum) {
 		this._header = header;
 		this._body = body;
 		this._author = author;
 		this._subForum = subForum;	
 		this._parent_post = null;
 		this._date = new Date();
-		this._replies = new Vector<IPost>();
+		this._replies = new Vector<IPost>();		
+		this._id = counter;
+		counter++;	
 	}
 	
-	public Post(String header, String body, IUser author, ISubForum subForum, IPost parent_post) {
+	private Post(String header, String body, IUser author, ISubForum subForum, IPost parent_post) {
 		this._header = header;
 		this._body = body;
 		this._author = author;
@@ -33,6 +54,8 @@ public class Post implements IPost {
 		this._parent_post = parent_post;
 		this._date = new Date();
 		this._replies = new Vector<IPost>();		
+		this._id = counter;
+		counter++;	
 	}
 //-----------------------------------------------------------------------
 	
@@ -76,6 +99,18 @@ public class Post implements IPost {
 
 	public Date get_date() {
 		return _date;
+	}
+	
+	public int get_id(){
+		return this._id;
+	}
+
+	@Override
+	public int numDescendants() {
+		int size = this._replies.size(); 
+		for(int i=0 ; i< this._replies.size() ; i++)
+			size = size +this._replies.get(i).numDescendants();
+		return size;	
 	}
 
 

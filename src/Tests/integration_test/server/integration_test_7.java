@@ -1,4 +1,4 @@
-package Tests.integration_test;
+package Tests.integration_test.server;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +31,7 @@ public class integration_test_7 {
 		this.forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");	
 		this.super_admin = new UserHandler(forum);
 		this.super_admin.login( "hadaramran",  "12374567");
-		this.forum.init_Forum();
+		//this.forum.init_Forum();
 
 		
 		UserHandler guest_1 = new UserHandler(forum);
@@ -46,11 +46,12 @@ public class integration_test_7 {
 
 	@After
 	public void tearDown() throws Exception {
-		this.forum.close_Forum();
+		//this.forum.close_Forum();
 	}
 
 	@Test
 	public void test() {	
+
 
 		//addnig several sub-fourm by admins only
 		UserHandler admin = new UserHandler(forum);
@@ -67,19 +68,19 @@ public class integration_test_7 {
 		}	
 
 		// Add member types
-		assertTrue(this.super_admin.addMemberType("Gold" , this.forum));
-		assertTrue(this.super_admin.addMemberType("Silver" ,this.forum));
-		assertTrue(this.super_admin.addMemberType("Bronze" ,this.forum));
-		assertFalse(admin.addMemberType("Platinum" ,this.forum));
-		assertFalse(member_1.addMemberType("Platinum" ,this.forum));
+		assertTrue(this.super_admin.addMemberType("Gold"));
+		assertTrue(this.super_admin.addMemberType("Silver"));
+		assertTrue(this.super_admin.addMemberType("Bronze"));
+		assertFalse(admin.addMemberType("Platinum"));
+		assertFalse(member_1.addMemberType("Platinum"));
 		
 		// Remove member types
-		assertTrue(this.super_admin.removeMemberType("Bronze", this.forum));
-		assertFalse(admin.removeMemberType("Silver", this.forum));
+		assertTrue(this.super_admin.removeMemberType("Bronze"));
+		assertFalse(admin.removeMemberType("Silver"));
 		
 		// Check number of member types in forum
-		assertTrue(this.super_admin.getNumberOfMemberTypes(forum) == 3);
-		assertFalse(admin.getNumberOfMemberTypes(forum) == 3);
+		assertTrue(this.super_admin.getNumberOfMemberTypes() == 3);
+		assertFalse(admin.getNumberOfMemberTypes() == 3);
 	}
 	 
 

@@ -75,7 +75,7 @@ public class BridgeProxy implements BridgeForum {
 		Service_Layer.IUserHandler user = new Service_Layer.UserHandler(new Forum(null ,new  Vector<IUser>()  ,""));
 		
 		Domain_layer.ForumComponent.ISubForum  sub = new Domain_layer.ForumComponent.SubForum("hagsfhg", new Vector<IUser>(), new Vector<Date>()) ;
-		Domain_layer.ForumComponent.Post post = new Domain_layer.ForumComponent.Post(p.getHead(), p.getBody() ,user.get_current_user()  , sub);
+		Domain_layer.ForumComponent.Post post =  Domain_layer.ForumComponent.Post.create_post(p.getHead(), p.getBody() ,user.get_current_user()  , sub);
 		return user.deletePost(post);
 	}
 
@@ -83,7 +83,7 @@ public class BridgeProxy implements BridgeForum {
 	public boolean addReplyPost(Member m, String header, String body) {
 		if (m.get_Type() != MemberType.GUEST){
 			Service_Layer.IUserHandler user = new Service_Layer.UserHandler(new Forum(null ,new  Vector<IUser>()  ,""));
-			Domain_layer.ForumComponent.Post post = new Domain_layer.ForumComponent.Post(null , null ,null ,null );
+			Domain_layer.ForumComponent.Post post =  Domain_layer.ForumComponent.Post.create_post(null , null ,null ,null );
 			return user.createReplyPost(header, body, post);
 		}
 		else return false;

@@ -1,6 +1,7 @@
 package Domain_layer.ForumComponent;
 
-public class MemberType {
+@SuppressWarnings("serial")
+public class MemberType  implements java.io.Serializable {
 	
 	private String _typeName;
 	

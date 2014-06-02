@@ -1,5 +1,6 @@
 package Domain_layer.ForumComponent;
 
-public class Logger {
+@SuppressWarnings("serial")
+public class Logger  implements java.io.Serializable {
 
 }

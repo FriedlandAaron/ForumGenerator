@@ -1,4 +1,4 @@
-package Tests.integration_test;
+package Tests.integration_test.server;
 
 import static org.junit.Assert.*;
 
@@ -8,11 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Domain_layer.ForumComponent.*;
+import Domain_layer.FourmUser.*;
 import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
 
 
-public class integration_test_5 {
+public class integration_test_6 {
 	private IForum forum;
 	private IUserHandler super_admin ;
 
@@ -31,35 +32,33 @@ public class integration_test_5 {
 		this.forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");	
 		this.super_admin = new UserHandler(forum);
 		this.super_admin.login( "hadaramran",  "12374567");
-		this.forum.init_Forum();
+		//this.forum.init_Forum();
 
 		
 		UserHandler guest_1 = new UserHandler(forum);
 
-		guest_1.register("alin", "1234321", "1234321");
-		guest_1.register("sapir", "1234321", "1234321");
-		guest_1.register("yosi", "1234321", "1234321");
+		assertTrue(guest_1.register("alin", "1234321", "1234321"));
+		assertTrue(guest_1.register("sapir", "lllll", "lllll"));
+		assertTrue(guest_1.register("yosi", "mkn", "mkn"));
 		
 		//addnig several sub-fourm by admins only
 		UserHandler admin = new UserHandler(forum);
 		admin.login("bobi_1", "kikdoskd");
 		admin.createSubForum("Sport" , (new String[]{"alin"}) );
-		
+		admin.createSubForum("Animals" , (new String[]{"yosi"}) );	
 	
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		this.forum.close_Forum();
+		//this.forum.close_Forum();
 	}
 
 	@Test
 	public void test() {	
-		//addnig several sub-fourm by admins only
-		UserHandler admin = new UserHandler(forum);
-		admin.login("bobi_1", "kikdoskd");
-		admin.createSubForum("Sport" , (new String[]{"alin"}) );
+
+
 		
 		//search for diff subforum and open new_thred_on them
 		UserHandler member_1 = (new UserHandler(forum));
@@ -74,35 +73,16 @@ public class integration_test_5 {
 		if(threads.size()>0) {
 			assertTrue(member_1.createReplyPost("hahaha", "yadayadayada", threads.get(0)));
 		}
-		
-		// Change policy
-		Policy p2 = new Policy();
-		assertTrue(admin.changePolicy(p2));
-		
-		// delete replay post 
-		Vector<IPost> member1_ReplyPost =  member_1.show_ReplyPost();
-		if(member1_ReplyPost.size() > 0)
-			assertTrue(member_1.deletePost(member1_ReplyPost.get(0)));
 
-
-
-		// delete Thread post 
-		Vector<IPost> member1_ThreadPost =  member_1.show_TreadPost();
-		if(member1_ThreadPost.size() > 0)
-			assertTrue(member_1.deletePost(member1_ThreadPost.get(0)));		
-		
-		 member1_ThreadPost =  member_1.show_TreadPost();
-		 assertTrue(member1_ThreadPost.size()==0);
+		ISubForum sub_animals = member_1.search_subforum("Theme", "Animals");		 
+		 
+		 //add complaint
+		 IUser moderator = sub_animals.getModerator("yosi");
+		 assertTrue(moderator!=null);
+		 assertTrue(member_1.create_thread("hadar" , "lkjhas" , sub_animals));
+		 assertTrue(member_1.addcomplaintModerator(sub_animals , "yosi" , "theme_complient" , "body_complient"));
 		 
 		 
-		 
-//		 //add complaint
-//		 IUser moderator = sub_animals.getModerator("yosi");
-//		 assertTrue(moderator!=null);
-//		 assertTrue(member_1.create_thread("hadar" , "lkjhas" , sub_animals));
-//		 assertTrue(member_1.addcomplaintModerator(sub_animals , "yosi" , "theme_complient" , "body_complient"));
-//		 
-//		 
 //		 // Registration by e-mail
 //		 
 //			 UserHandler guest_5 = new UserHandler(forum);

@@ -1,5 +1,19 @@
 package Domain_layer.ForumComponent;
 
-public interface IPolicy {
+import Domain_layer.FourmUser.IUser;
+import Domain_layer.FourmUser.User.Status;
 
+public interface IPolicy {
+	boolean login(IUser current_user);
+	public boolean logout(IUser current_user);
+	public boolean createSubForum(IUser current_user);
+	public boolean changePolicy(IUser current_user);
+	public boolean deletePost(IUser current_user);
+	public boolean deleteSubForum(IUser current_user);
+	public boolean addModerator(IUser current_user);
+	public boolean removeModerator(IUser current_user);
+	public boolean getNumberOfTypes(IUser current_user);
+	public boolean removeMemberType(IUser current_user);
+	public boolean addMemberType(IUser current_user);
+	public boolean setMethodPolicy(IUser current_user , String Methodname , Status s) ;
 }

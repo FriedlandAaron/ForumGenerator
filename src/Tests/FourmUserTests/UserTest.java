@@ -13,13 +13,14 @@ import Domain_layer.ForumComponent.SubForum;
 import Domain_layer.FourmUser.Complaint;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User;
+import Domain_layer.FourmUser.User.Status;
 
 public class UserTest {
 
-	private IUser user_1 = new User("hadaramr", "hugidjhf" , "ADMINISTRATOR") ; 
-	private IUser user_2 = new User("hod", "kajsj#jhd" ,"SUPER_ADMINISTRATOR") ; 
-	private IUser user_3 = new User("hod1", "kajsj#f" ,"MEMBER") ; 
-	private IUser user_4 = new User("hod2", "kajdfsj#s" ,"GUEST") ;  
+	private IUser user_1 = new User("hadaramr", "hugidjhf" ,  Status.ADMINISTRATOR) ; 
+	private IUser user_2 = new User("hod", "kajsj#jhd" ,Status.SUPER_ADMINISTRATOR) ; 
+	private IUser user_3 = new User("hod1", "kajsj#f" ,Status.MEMBER) ; 
+	private IUser user_4 = new User("hod2", "kajdfsj#s" ,Status.GUEST) ;  
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -28,30 +29,15 @@ public class UserTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test
-	public void testIsUser() {
-		
-		assertTrue(user_1.isUser("ADMINISTRATOR"));
-		assertTrue(user_2.isUser("SUPER_ADMINISTRATOR"));
-		assertTrue(user_3.isUser("MEMBER"));
-		assertTrue(user_4.isUser("GUEST"));
-		
-		assertFalse(user_1.isUser(""));
-		assertFalse(user_1.isUser("dsdsd"));
-		assertFalse(user_1.isUser("SUPER_ADMINISTRATOR"));
-		assertFalse(user_3.isUser("GUEST"));
-		assertFalse(user_2.isUser("ADMINISTRATOR"));
-		assertFalse(user_1.isUser("MEMBER"));
-	}
 
 	@Test
 	public void testAdd_thread() {
 		
 		
-		IPost post1 = new Post("hedaer1" ,"body1" ,user_1 ,null);
-		IPost post2 = new Post("hedaer2" ,"body2" ,user_2 , null);
-		IPost post3 = new Post("hedaer3" ,"body3" ,user_3 , null );
-		IPost post4 = new Post("hedaer4" ,"body4" ,user_4 , null  );
+		IPost post1 = Post.create_post("hedaer1" ,"body1" ,user_1 ,null);
+		IPost post2 = Post.create_post("hedaer2" ,"body2" ,user_2 , null);
+		IPost post3 = Post.create_post("hedaer3" ,"body3" ,user_3 , null );
+		IPost post4 = Post.create_post("hedaer4" ,"body4" ,user_4 , null  );
  
 		user_1.add_thread(post1);
 		user_2.add_thread(post2);
@@ -76,10 +62,10 @@ public class UserTest {
 
 	@Test
 	public void testAdd_replyPost() {
-		IPost post1 = new Post("hedaer1" ,"body1" ,user_1 ,null);
-		IPost post2 = new Post("hedaer2" ,"body2" ,user_2 , null);
-		IPost post3 = new Post("hedaer3" ,"body3" ,user_3 , null );
-		IPost post4 = new Post("hedaer4" ,"body4" ,user_4 , null  );
+		IPost post1 = Post.create_post("hedaer1" ,"body1" ,user_1 ,null);
+		IPost post2 = Post.create_post("hedaer2" ,"body2" ,user_2 , null);
+		IPost post3 = Post.create_post("hedaer3" ,"body3" ,user_3 , null );
+		IPost post4 = Post.create_post("hedaer4" ,"body4" ,user_4 , null  );
  
 		user_1.add_replyPost(post1);
 		user_2.add_replyPost(post2);
@@ -105,10 +91,10 @@ public class UserTest {
 	@Test
 	public void testDeletePost() {		
 		
-		IPost post1 = new Post("hedaer1" ,"body1" ,user_1 ,null);
-		IPost post2 = new Post("hedaer2" ,"body2" ,user_1 , null);
-		IPost post3 = new Post("hedaer3" ,"body3" ,user_1 , null );
-		IPost post4 = new Post("hedaer4" ,"body4" ,user_1 , null  );
+		IPost post1 = Post.create_post("hedaer1" ,"body1" ,user_1 ,null);
+		IPost post2 = Post.create_post("hedaer2" ,"body2" ,user_1 , null);
+		IPost post3 = Post.create_post("hedaer3" ,"body3" ,user_1 , null );
+		IPost post4 = Post.create_post("hedaer4" ,"body4" ,user_1 , null  );
  
 		user_1.add_thread(post1);
 		user_1.add_thread(post2);
@@ -145,7 +131,7 @@ public class UserTest {
 		ISubForum sub_forum = new SubForum("titanic" , null , null);
 		
 		assertFalse(user_1.isPostedInSubForum(sub_forum));
-		IPost post1 = new Post("hedaer1" ,"body1" ,user_1 ,sub_forum);
+		IPost post1 = Post.create_post("hedaer1" ,"body1" ,user_1 ,sub_forum);
 		sub_forum.openThread(post1);
 		user_1.add_thread(post1);		
 		assertTrue(user_1.isPostedInSubForum(sub_forum));

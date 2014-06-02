@@ -15,6 +15,7 @@ import Domain_layer.ForumComponent.Post;
 import Domain_layer.ForumComponent.SubForum;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User;
+import Domain_layer.FourmUser.User.Status;
 
 public class PostTest {
 	
@@ -27,9 +28,9 @@ public class PostTest {
 	@Before
 	public void setUp() throws Exception {
 		subForum = new SubForum("Nothing", new Vector<IUser>(), new Vector<Date>());
-		user1 = new User("aaronf", "hello", "MEMBER");
-		user2 = new User("hadara", "hello", "MEMBER");
-		post = new Post("Welcome", "This is a test.", user1, subForum);
+		user1 = new User("aaronf", "hello",  Status.MEMBER);
+		user2 = new User("hadara", "hello",  Status.MEMBER);
+		post =  Post.create_post("Welcome", "This is a test.", user1, subForum);
 		user1.add_thread(post);
 	}
 
@@ -39,7 +40,7 @@ public class PostTest {
 
 	@Test
 	public void testAddReplyPost() {
-		Post reply = new Post("Reply", "This is a reply test.", user2, subForum, post);
+		Post reply =  Post.create_post("Reply", "This is a reply test.", user2, subForum, post);
 		post.addReplyPost(reply);
 		Vector<IPost> replies = post.get_replies();
 		assertFalse(replies.isEmpty());

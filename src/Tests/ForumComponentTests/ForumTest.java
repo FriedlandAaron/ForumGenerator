@@ -16,6 +16,7 @@ import Domain_layer.ForumComponent.Policy;
 import Domain_layer.ForumComponent.SubForum;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User;
+import Domain_layer.FourmUser.User.Status;
 
 public class ForumTest {
 	private Forum forum;
@@ -51,10 +52,10 @@ public class ForumTest {
 		 for(int i =0 ; i< admins.size(); i++){
 			 administrators.add(new User(admins.get(i)[0],
 					 					 admins.get(i)[1] ,
-					 					 "ADMINISTRATOR"));
+					 					 Status.ADMINISTRATOR));
 		 }
 		 
-		 administrators.add(new User("hadar" , "hghgsajh" ,"SUPER_ADMINISTRATOR" ));
+		 administrators.add(new User("hadar" , "hghgsajh" , Status.SUPER_ADMINISTRATOR));
 		this.forum = new Forum(p ,administrators , "TEST_FORUM" );
 		
 	}

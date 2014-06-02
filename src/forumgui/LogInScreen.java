@@ -145,9 +145,13 @@ public class LogInScreen extends javax.swing.JFrame {
         boolean b = MainMenu._userHandler.login(username, password); 
         Status userStatus = MainMenu._userHandler.getUserStatus();
 
-        //if (b)
-        //	createSubForumPage(userStatus);
-        jLabel5.setText("Wrong Username or Password, Please try again");
+        if (b){
+        	setVisible(false);
+        	new MainForumPage(userStatus, username).setVisible(true);
+        }
+        else {
+        	jLabel5.setText("Wrong Username or Password, Please try again");
+        }
     }//GEN-LAST:event_button1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

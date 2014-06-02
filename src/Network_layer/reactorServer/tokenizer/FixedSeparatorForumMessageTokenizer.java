@@ -96,8 +96,8 @@ public class FixedSeparatorForumMessageTokenizer implements MessageTokenizer<For
           System.out.println(e);
           System.exit(1);
       }
-      System.out.println("<GetMassage>\n\n"+forumMessage.toString());
-      System.out.println("<\\GetMassage>");
+      //System.out.println("<GetMassage>\n\n"+forumMessage.toString());
+      //System.out.println("<\\GetMassage>");
 
       return forumMessage;
    }

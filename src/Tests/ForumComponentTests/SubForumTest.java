@@ -14,6 +14,7 @@ import Domain_layer.ForumComponent.Post;
 import Domain_layer.ForumComponent.SubForum;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User;
+import Domain_layer.FourmUser.User.Status;
 
 public class SubForumTest {
 	
@@ -23,8 +24,8 @@ public class SubForumTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mod1 = new User("aaronf", "hello", "MEMBER");
-		mod2 = new User("hadara", "hello", "MEMBER");
+		mod1 = new User("aaronf", "hello",  Status.MEMBER);
+		mod2 = new User("hadara", "hello",  Status.MEMBER);
 		Vector<IUser> mods = new Vector<IUser>();
 		mods.add(mod1);
 		mods.add(mod2);
@@ -40,7 +41,7 @@ public class SubForumTest {
 
 	@Test
 	public void testOpenThread() {
-		mod1.add_thread(new Post("Welcome", "First thread", mod1, subForum));
+		mod1.add_thread( Post.create_post("Welcome", "First thread", mod1, subForum));
 		assertFalse(subForum.showThreads().contains(mod1.get_threads().get(0)));
 		subForum.openThread(mod1.get_threads().get(0));
 		assertTrue(subForum.showThreads().contains(mod1.get_threads().get(0)));
@@ -61,8 +62,8 @@ public class SubForumTest {
 	@Test
 	public void testShowThreads() {
 		Vector<Post> threads = new Vector<Post>();
-		Post p1 = new Post("Welcome", "First thread", mod1, subForum);
-		Post p2 = new Post("Welcome2", "Second thread", mod2, subForum);
+		Post p1 =  Post.create_post("Welcome", "First thread", mod1, subForum);
+		Post p2 =  Post.create_post("Welcome2", "Second thread", mod2, subForum);
 		threads.add(p1);
 		threads.add(p2);
 		mod1.add_thread(p1);
@@ -75,8 +76,8 @@ public class SubForumTest {
 
 	@Test
 	public void testDeletePost() {
-		Post p1 = new Post("Welcome", "First thread", mod1, subForum);
-		Post p2 = new Post("Welcome2", "Second thread", mod2, subForum);
+		Post p1 =  Post.create_post("Welcome", "First thread", mod1, subForum);
+		Post p2 =  Post.create_post("Welcome2", "Second thread", mod2, subForum);
 		mod1.add_thread(p1);
 		mod2.add_thread(p2);
 		subForum.openThread(mod1.get_threads().get(0));
@@ -89,8 +90,8 @@ public class SubForumTest {
 
 	@Test
 	public void testDelete() {
-		Post p1 = new Post("Welcome", "First thread", mod1, subForum);
-		Post p2 = new Post("Welcome2", "Second thread", mod2, subForum);
+		Post p1 =  Post.create_post("Welcome", "First thread", mod1, subForum);
+		Post p2 =  Post.create_post("Welcome2", "Second thread", mod2, subForum);
 		mod1.add_thread(p1);
 		mod2.add_thread(p2);
 		subForum.openThread(mod1.get_threads().get(0));

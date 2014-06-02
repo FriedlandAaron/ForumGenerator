@@ -9,6 +9,7 @@ import java.util.Vector;
 import Domain_layer.ForumComponent.Forum;
 import Domain_layer.ForumComponent.IForum;
 import Domain_layer.ForumComponent.Policy;
+import Domain_layer.FourmUser.User.Status;
 import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
 
@@ -34,7 +35,7 @@ public class MainMenu extends javax.swing.JFrame {
       admins.add(a3);	
       		
       //create forum		
-      IForum forum = Forum.createForum( "hadaramran" , "1234567" ,p ,admins, "Cat");	
+      IForum forum = Forum.createForum( "oren2" , "1234567" ,p ,admins, "Cat");	
       MainMenu._userHandler = new UserHandler(forum);
     }
 
@@ -170,7 +171,8 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button4ActionPerformed
         setVisible(false);
-        new MainForumPage().setVisible(true);
+        
+        new MainForumPage(Status.GUEST, "").setVisible(true);
     }//GEN-LAST:event_button4ActionPerformed
 
     private void button6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button6ActionPerformed

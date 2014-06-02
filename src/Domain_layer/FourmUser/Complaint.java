@@ -2,7 +2,8 @@ package Domain_layer.FourmUser;
 
 import java.util.Date;
 
-public class Complaint implements   IComplaint {
+@SuppressWarnings("serial")
+public class Complaint implements   IComplaint  , java.io.Serializable {
 	private IUser _submitter;
 	private IUser _complaint_on_user;
 	private Date _date;

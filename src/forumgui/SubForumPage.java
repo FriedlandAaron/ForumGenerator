@@ -4,23 +4,26 @@
  */
 package forumgui;
 
+import Domain_layer.FourmUser.User.Status;
+
 /**
  *
  * @author ocoh
  */
 public class SubForumPage extends javax.swing.JFrame {
-
+    Status userStatus;
+    String userName;
+    String context;
     /**
      * Creates new form SubForumPage
      */
-    public SubForumPage(String subject) {
+    public SubForumPage(String subject , Status userStatus, String userName) {
+        this.userStatus = userStatus;
+        this.userName = userName;
+        this.context="oren is great";
         initComponents();
         jLabel1.setText(subject);
-        list1.add("post1");
-        list1.add("post2");
-        list1.add("post3");
-        list1.add("post4");
-        list1.add("post5");
+
     }
 
     /**
@@ -65,6 +68,12 @@ public class SubForumPage extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,14 +122,22 @@ public class SubForumPage extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         setVisible(false);
-        new MainForumPage().setVisible(true);
+        new MainMenu().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        //setVisible(false);
+        
+       if (MainMenu._userHandler.create_thread("oren", "asdasdasdasdasd", "sport")){
+        	list1.add("oren");}
+        //new EnterDetailsPost().setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void list1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_list1ActionPerformed
          for (int i=0; i < list1.getItemCount(); i++){
             if (list1.isIndexSelected(i)){
                 setVisible(false);
-                new PostPage().setVisible(true);}
+                new PostPage(userStatus, userName , context).setVisible(true);}
         }
     
     }//GEN-LAST:event_list1ActionPerformed

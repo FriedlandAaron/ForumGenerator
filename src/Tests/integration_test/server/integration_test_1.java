@@ -1,4 +1,4 @@
-package Tests.integration_test;
+package Tests.integration_test.server;
 
 import static org.junit.Assert.*;
 
@@ -13,12 +13,13 @@ import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
 
 
-public class integration_test_2 {
+public class integration_test_1 {
 	private IForum forum;
 	private IUserHandler super_admin ;
 
 	@Before
 	public void setUp() throws Exception {
+		
 		//create forum components
 
 		Policy p = new Policy();
@@ -32,32 +33,38 @@ public class integration_test_2 {
 		this.forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Cat");	
 		this.super_admin = new UserHandler(forum);
 		this.super_admin.login( "hadaramran",  "12374567");
-		this.forum.init_Forum();
-
+		//this.forum.init_Forum();
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		this.forum.close_Forum();
+		//this.forum.close_Forum();
 	}
 
 	@Test
-	public void test() {			
-		UserHandler guest_1 = new UserHandler(forum);
-
-		assertTrue(guest_1.register("alin", "1234321", "1234321"));
-		assertTrue(guest_1.register("sapir", "1234321", "1234321"));
-		assertTrue(guest_1.register("yosi", "1234321", "1234321"));
-	
-		//addnig several sub-fourm by admins only
-		UserHandler admin = new UserHandler(forum);
-		assertTrue(admin.login("bobi_1", "kikdoskd"));
-		assertTrue(admin.createSubForum("Sport" , (new String[]{"alin"}) ));
-		assertTrue(admin.createSubForum("Music" ,  (new String[]{"sapir"})));
-		assertTrue(admin.createSubForum("Animals" ,  (new String[]{"yosi"})));
-		assertFalse(admin.createSubForum("Animals" ,  (new String[]{"sapir"})));
+	public void test() {
+			
 		
+		//guest_1 usecaes
+		UserHandler guest_1 = new UserHandler(forum);
+		assertTrue(guest_1.register("hodamr", "1234321", "1234321"));
+		assertFalse(guest_1.register("mima", "1234321", "1234321"));
+
+		assertTrue(guest_1.login("hodamr", "1234321"));
+		assertTrue(guest_1.logout());
+		assertFalse(guest_1.logout());
+		
+		
+		UserHandler guest_2 = new UserHandler(forum);
+		assertFalse(guest_2.register("hodamr", "4", "4"));
+		assertTrue(guest_2.register("alin", "5fs0d2SW", "5fs0d2SW"));
+		assertTrue(guest_2.register("sapir", "gjkg5Ofjh", "gjkg5Ofjh"));
+		assertTrue(guest_2.register("yosi", "hs5F%4j3h", "hs5F%4j3h"));	
+		assertFalse(guest_1.register("mima", "gjkg5Ofjh", "gjkg5Ofjh"));
+		assertFalse(guest_1.register("mima", "5fs0d2SW", "5fs0d2SW"));
+
+
 
 	}
 

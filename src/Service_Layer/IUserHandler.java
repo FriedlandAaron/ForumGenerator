@@ -28,11 +28,23 @@ public interface IUserHandler {
 	public boolean deletePost(IPost post);
 	public boolean deleteSubForum(ISubForum sub_forum);
 	public boolean addcomplaintModerator(ISubForum sub_fourm, String search_word , String theme ,String body ) ;
-	public boolean addMemberType(String type , IForum forum);
-	public boolean removeMemberType(String type, IForum forum);
-	public int getNumberOfMemberTypes(IForum forum);
+	public boolean addMemberType(String type );
+	public boolean removeMemberType(String type);
+	public int getNumberOfMemberTypes();
 	
+	//--ver2
+	public boolean addModerator(String sub_forum_theme ,String username_to_moderate);
+	public boolean removeModerator(String sub_forum_theme ,String username_to_moderate);
+	public int	   numSubForum();
+	public int	   numSharedModeratorsSubForum();
+	public int	   numPostsSubForum(String sub_forum_theme);
+	public int	   numPostsUser(String username);
+	public Vector<IUser>   Moderators_list();
+	public String  Moderators_Report();	
+	public boolean setMethodPolicy(String Methodname , Status s) ;
+
 	
+	//geteersand setters
 	public Vector<IPost> get_threads();
 	public Vector<IPost> get_reaplayPosts() ;
 	public String get_password() ;
@@ -47,8 +59,13 @@ public interface IUserHandler {
 	public MemberType get_type() ;
 	public IUser get_current_user();
 	
+	public void close_connect() ;
+	
+	
 	//--------GUI----------
-	public Status getUserStatus();
+
+	public Status getUserStatus();	//delete this all ready exsist
+	public boolean create_thread(String header, String body, String string);
 	
 	
 	
