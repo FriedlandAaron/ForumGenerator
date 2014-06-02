@@ -68,6 +68,8 @@ public class integration_test_3 implements Runnable {
 		ISubForum sub_animals = cl_handler.search_subforum("Theme","Animals");
 		ISubForum sub_Music = cl_handler.search_subforum("Moderator","sapir");
 		
+
+		
 		assertTrue(sub_animals.get_theme().equals("Animals"));		
 		assertTrue(sub_Music.get_theme().equals("Music"));
 
@@ -79,6 +81,8 @@ public class integration_test_3 implements Runnable {
 		 sub_Music = cl_handler.search_subforum("Theme", "Music");
 		 assertTrue(sub_Music == null);
 	}
+	
+	
 	
 	public void run() {
 		try {

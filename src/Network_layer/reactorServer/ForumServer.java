@@ -17,7 +17,7 @@ public class ForumServer {
 	public static void main(String args[]) {
 		
 		try {
-			int port = 6667;
+			int port = 4444;
 			int poolSize =3;
 			
 			//create forum components

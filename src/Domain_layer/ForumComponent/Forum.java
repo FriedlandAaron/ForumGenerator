@@ -3,6 +3,7 @@ package Domain_layer.ForumComponent;
 import java.util.Date;
 import java.util.Vector;
 
+import Domain_layer.ForumComponent.Logger.*;
 import Domain_layer.FourmUser.Complaint;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User;
@@ -16,8 +17,8 @@ public class Forum implements IForum  , java.io.Serializable {
 	private Vector<IUser> _banned_members;
 	private Vector<IUser> _administrators;
 	private Vector<ISubForum> _subForums;
-	private Logger _action_logger;
-	private Logger _error_logger;
+	private Action_Logger _action_logger;
+	private Error_Logger _error_logger;
 	private IPolicy _policy ; 
 	//private MailHandler _mailHandler ; 
 	private Vector<MemberType> _memberTypes;
@@ -31,8 +32,8 @@ public class Forum implements IForum  , java.io.Serializable {
 		this._banned_members= new Vector<IUser>();
 		this._administrators = administrators ;
 		this._subForums = new Vector<ISubForum>();
-		this._action_logger = new Logger();
-		this._error_logger = new Logger();
+		this._action_logger = new Action_Logger();
+		this._error_logger = new Error_Logger();
 		if(policy!=null)
 			this._policy = policy;
 		else
@@ -228,8 +229,8 @@ public class Forum implements IForum  , java.io.Serializable {
 	public Vector<IUser> get_banned_members() {	return _banned_members;}
 	public Vector<IUser> get_administrators() {	return _administrators;	}
 	public Vector<ISubForum> get_subForums() {return _subForums;}
-	public Logger get_action_logger() {	return _action_logger;}
-	public Logger get_error_logger() {	return _error_logger;}
+	public Action_Logger get_action_logger() {	return _action_logger;}
+	public Error_Logger get_error_logger() {	return _error_logger;}
 	public IPolicy get_policy() {return _policy;}
 	public Vector<MemberType> get_memberTypes() {return _memberTypes;}
 	public Vector<String[]> get_waitingList() {	return _waitingList;}
@@ -479,7 +480,6 @@ public class Forum implements IForum  , java.io.Serializable {
 	}
 
 	public int get_id() {
-		// TODO Auto-generated method stub
 
 		return 1;
 	}

@@ -2,6 +2,7 @@ package Domain_layer.ForumComponent;
 
 import java.util.Vector;
 
+import Domain_layer.ForumComponent.Logger.*;
 import Domain_layer.FourmUser.*;
 import Domain_layer.FourmUser.User.Status;
 
@@ -35,8 +36,8 @@ public interface IForum {
 	public Vector<IUser> get_banned_members() ;
 	public Vector<IUser> get_administrators();
 	public Vector<ISubForum> get_subForums();
-	public Logger get_action_logger();
-	public Logger get_error_logger() ;
+	public Action_Logger get_action_logger();
+	public Error_Logger get_error_logger() ;
 	public IPolicy get_policy();
 	public Vector<MemberType> get_memberTypes() ;
 	public Vector<String[]> get_waitingList() ;

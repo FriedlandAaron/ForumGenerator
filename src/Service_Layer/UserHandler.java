@@ -25,10 +25,12 @@ public class UserHandler implements IUserHandler {
 		_current_user_forum = _forum;
 	} 	
 	
-//----------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
 	
 	public boolean register(String username, String password, String repeated_password) {
-		return this._current_user_forum.register(username ,password ,repeated_password  );
+		synchronized(_current_user_forum){
+			return this._current_user_forum.register(username ,password ,repeated_password  );
+		}
 	}
 	
 //	public boolean register_Email(String username, String password, String repeated_password , String email) {

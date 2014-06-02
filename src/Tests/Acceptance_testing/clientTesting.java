@@ -1,8 +1,5 @@
 package Tests.Acceptance_testing;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Vector;
 
 import org.junit.After;

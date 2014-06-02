@@ -128,7 +128,7 @@ public class UserProtocol implements AsyncServerProtocol<ForumMessage> {
 	//-----------------------------commend-------------------------
 	private ForumMessage command(String func_name , Class<?>[] func_args ,ForumMessageMinorType minor ,   ForumMessage msg){
 		try {
-			Method m= IUserHandler.class.getMethod(func_name ,func_args);
+			Method m = IUserHandler.class.getMethod(func_name ,func_args);
 			return ForumMessage.create_Replay( minor ,m.invoke(this._userHandler, msg.get_Object_Array()) );
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
         	return  ForumMessage.create_ErrorReplay("Error in command: " + e.toString());  

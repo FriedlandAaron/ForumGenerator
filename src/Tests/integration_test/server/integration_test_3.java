@@ -8,6 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.Gson;
+
 import Domain_layer.ForumComponent.*;
 import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
@@ -76,9 +78,10 @@ public class integration_test_3 {
 		 admin.deleteSubForum(sub_Music);
 		 sub_Music = member_1.search_subforum("Theme", "Music");
 		 assertTrue(sub_Music == null);
-
-		
-
 	}
+	
+	
+
+
 
 }

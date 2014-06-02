@@ -19,7 +19,7 @@ import Service_Layer.ClientHandler;
 
 
 public class non_functional_test_1 implements Runnable {
-	private static final int CLIENTS = 10;
+	private static final int CLIENTS = 110;
 	private static  int ERRORS =0;
 	private int counter = 0;
 	private ClientHandler cl_handler_Main;
@@ -115,13 +115,14 @@ public class non_functional_test_1 implements Runnable {
 
 		assertTrue(cl_handler_Main.numPostsSubForum("Animals")==(CLIENTS/2 +CLIENTS%2));
 		assertTrue(cl_handler_Main.numPostsUser("bobi_2")==CLIENTS);
+		
 
 	}
 
 
 	public void run() {
 		try {
-			int port = 6610 , poolSize =CLIENTS+3;					
+			int port = 6610 , poolSize =10;					
 			//create forum components
 			Policy p = new Policy();
 			Vector<String[]> admins = new  Vector<String[]>(); 
