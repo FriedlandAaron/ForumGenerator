@@ -1,17 +1,22 @@
 package Tests.integration_test.server;
 
-import static org.junit.Assert.*;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Domain_layer.ForumComponent.*;
+import Domain_layer.ForumComponent.Forum;
+import Domain_layer.ForumComponent.IForum;
+import Domain_layer.ForumComponent.IPost;
+import Domain_layer.ForumComponent.ISubForum;
+import Domain_layer.ForumComponent.Policy;
 import Service_Layer.UserHandler;
 
 
-public class integration_test_4 {
+public class integration_test_4  extends TestCase {
 	private IForum forum;
 	private UserHandler super_admin ;
 
@@ -61,7 +66,7 @@ public class integration_test_4 {
 		UserHandler member_1 = (new UserHandler(forum));
 		Vector<ISubForum> list_sub = member_1.show_sub_forum();
 		if(list_sub.size()>0){
-			assertTrue(member_1.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0)));
+			assertTrue(member_1.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0).get_theme()));
 		}	
 
 		// Adding a reply post to the existing post

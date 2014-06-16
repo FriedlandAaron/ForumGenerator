@@ -42,6 +42,9 @@ public class ProtocolTask<T> implements Runnable {
       }
 	}
 
+	public ServerProtocol<T> get_protocol() {
+		return _protocol;
+	}
 	public void addBytes(ByteBuffer b) {
 		_tokenizer.addBytes(b);
 	}

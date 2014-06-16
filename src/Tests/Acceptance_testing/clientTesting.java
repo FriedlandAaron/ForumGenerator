@@ -22,14 +22,16 @@ import Service_Layer.IUserHandler;
 
 public class clientTesting extends ForumTest {
 
+	private static int port_con = 8100 ; 
 	private IForum forum;
 	private IUserHandler userHandler;
-
+	private int port ;
 	@Before
 	public void setUp() {
 		super.setUp();
 		try {
-			int port = 7000;
+			port = port_con;
+			port_con++;
 			int poolSize = 3;
 
 			//create forum components
@@ -59,14 +61,13 @@ public class clientTesting extends ForumTest {
 	@Before
 	public void setUpUserHandler() {
 		System.out.println("Client testing: setting up user handler");
-		ConnectionHandler connectionHandler = ConnectionHandler.connect_server("127.0.0.1" , (short) 7000); 
+		ConnectionHandler connectionHandler = ConnectionHandler.connect_server("127.0.0.1" , (short) port); 
 		userHandler = new ClientHandler(connectionHandler);
 	}
 	
 	@After
 	public void tearDown() {
 		userHandler.close_connect();
-		System.out.println("df");
 	}
 
 	@Test
@@ -109,9 +110,9 @@ public class clientTesting extends ForumTest {
 		assertTrue(musicSubForum.get_theme().equals("Music"));
 		
 		// Delete subforums 
-		assertTrue(userHandler.deleteSubForum(musicSubForum));
-		assertTrue(userHandler.deleteSubForum(animalsSubForum));
-		assertTrue(userHandler.deleteSubForum(sportSubForum));
+		assertTrue(userHandler.deleteSubForum(musicSubForum.get_theme()));
+		assertTrue(userHandler.deleteSubForum(animalsSubForum.get_theme()));
+		assertTrue(userHandler.deleteSubForum(sportSubForum.get_theme()));
 		assertTrue(userHandler.logout());
 		musicSubForum = userHandler.search_subforum("Theme", "Music");
 		assertTrue(musicSubForum == null);
@@ -125,7 +126,7 @@ public class clientTesting extends ForumTest {
 		Vector<ISubForum> list_sub = userHandler.show_sub_forum();
 		if(list_sub.size()>0){
 			// Create post
-			assertTrue(userHandler.create_thread("Hello" , "This is a test post" , list_sub.get(0)));
+			assertTrue(userHandler.create_thread("Hello" , "This is a test post" , list_sub.get(0).get_theme()));
 		}	
 
 		// Adding a reply post to the existing post
@@ -134,7 +135,7 @@ public class clientTesting extends ForumTest {
 		if(threads.size()>0) {
 			assertTrue(userHandler.createReplyPost("Hi", "This is a reply post", threads.get(0)));
 		}
-		assertTrue(userHandler.deleteSubForum(sportSubForum));
+		assertTrue(userHandler.deleteSubForum(sportSubForum.get_theme()));
         userHandler.logout();
 	}
 	
@@ -146,7 +147,7 @@ public class clientTesting extends ForumTest {
 		// Add new thread to subforum
 		Vector<ISubForum> list_sub = userHandler.show_sub_forum();
 		if(list_sub.size() > 0){
-			assertTrue(userHandler.create_thread("Hi", "This is a test thread" , list_sub.get(0)));
+			assertTrue(userHandler.create_thread("Hi", "This is a test thread" , list_sub.get(0).get_theme()));
 		}	
 
 		// Adding a reply post to the existing post
@@ -160,21 +161,6 @@ public class clientTesting extends ForumTest {
 		Policy p2 = new Policy();
 		assertTrue(userHandler.changePolicy(p2));
 
-		// Delete reply post
-		Vector<IPost> member1_ReplyPost = userHandler.show_ReplyPost();
-		if(member1_ReplyPost.size() > 0)
-			assertTrue(userHandler.deletePost(member1_ReplyPost.get(0)));
-
-		// delete Thread post 
-		Vector<IPost> member1_ThreadPost = userHandler.show_TreadPost();
-		if(member1_ThreadPost.size() > 0)
-			assertTrue(userHandler.deletePost(member1_ThreadPost.get(0)));		
-
-		member1_ThreadPost = userHandler.show_TreadPost();
-//		assertTrue(member1_ThreadPost.size() == 0);
-		userHandler.deleteSubForum(sub_sport);
-		assertTrue(userHandler.logout());
-
 	}
 	
 	@Test
@@ -184,7 +170,7 @@ public class clientTesting extends ForumTest {
 
 		Vector<ISubForum> list_sub = userHandler.show_sub_forum();
 		if(list_sub.size() > 0){
-			assertTrue(userHandler.create_thread("Hi" , "This is a test thread" , list_sub.get(0)));
+			assertTrue(userHandler.create_thread("Hi" , "This is a test thread" , list_sub.get(0).get_theme()));
 		}	
 
 		// Adding a reply post to the existing post
@@ -199,42 +185,11 @@ public class clientTesting extends ForumTest {
 		assertTrue(moderator != null);
 		assertTrue(userHandler.addcomplaintModerator(sportSubForum , "alin" , "theme_complient" , "body_complient"));
 		
-		userHandler.deleteSubForum(sportSubForum);
+		userHandler.deleteSubForum(sportSubForum.get_theme());
 		assertTrue(userHandler.logout());
 	}
 	
-	@Test
-	public void testAddAndRemoveMemberTypes() {
-		
-		// Add member types
-		userHandler.login("aaronf", "987654321");
-		assertTrue(userHandler.addMemberType("Gold"));
-		assertTrue(userHandler.addMemberType("Silver"));
-		assertTrue(userHandler.addMemberType("Bronze"));
-		userHandler.logout();
 
-		userHandler.login("bobi_1", "kikdoskd");		
-		assertFalse(userHandler.addMemberType("Platinum"));
-		userHandler.logout();
-		assertFalse(userHandler.addMemberType("Platinum"));
-
-		// Remove member types
-		userHandler.login("aaronf", "987654321");
-		assertTrue(userHandler.removeMemberType("Bronze"));
-		userHandler.logout();
-		userHandler.login("bobi_1", "kikdoskd");		
-		assertFalse(userHandler.removeMemberType("Silver"));
-		userHandler.logout();
-
-		// Check number of member types in forum
-		userHandler.login("aaronf", "987654321");
-		assertTrue(userHandler.getNumberOfMemberTypes() == 3);
-		userHandler.logout();
-
-		userHandler.login("bobi_1", "kikdoskd");
-		assertFalse(userHandler.getNumberOfMemberTypes() == 3);
-		userHandler.logout();
-	}
 	
 	@Test
 	public void testSubForumAndRemovingModerators() {
@@ -269,13 +224,7 @@ public class clientTesting extends ForumTest {
 		assertTrue(userHandler.addModerator("Sport", "sapir"));
 		assertTrue(userHandler.numSharedModeratorsSubForum() == 1);
 
-		//Moderators_list
-		Vector<IUser> list  = userHandler.Moderators_list();
-		assertTrue(list.size()==3);
-		for(IUser user : list)
-			assertTrue(user.get_username().equals("sapir")||
-					user.get_username().equals("yosi")||
-					user.get_username().equals("alin"));
+		
 
 		ISubForum sportSubForum = userHandler.search_subforum("Theme", "Sport");
 		ISubForum animalsSubForum = userHandler.search_subforum("Theme", "Animals");
@@ -288,13 +237,13 @@ public class clientTesting extends ForumTest {
 		// number of posts is 6, 7, 8
 		assertTrue(sportSubForum != null);
 		assertTrue(userHandler.numPostsSubForum("Sport")== 0);
-		assertTrue(userHandler.numPostsUser(userHandler.get_username()) == 6);
-		assertTrue(userHandler.create_thread("Hi" , "Thread 1 in sports" , sportSubForum));
+		assertTrue(userHandler.numPosts_user(userHandler.get_username()) == 0);
+		assertTrue(userHandler.create_thread("Hi" , "Thread 1 in sports" , sportSubForum.get_theme()));
 		assertTrue(userHandler.numPostsSubForum("Sport")== 1);
-		assertTrue(userHandler.numPostsUser(userHandler.get_username()) == 7);
-		assertTrue(userHandler.create_thread("Hello" , "Thread 1 in animals" , animalsSubForum));
+		assertTrue(userHandler.numPosts_user(userHandler.get_username()) == 1);
+		assertTrue(userHandler.create_thread("Hello" , "Thread 1 in animals" , animalsSubForum.get_theme()));
 		assertTrue(userHandler.numPostsSubForum("Animals")== 1);
-		assertTrue(userHandler.numPostsUser(userHandler.get_username()) == 8);
+		assertTrue(userHandler.numPosts_user(userHandler.get_username()) == 2);
 		
 		userHandler.logout();
 		userHandler.login("bobi_1", "kikdoskd");
@@ -308,8 +257,8 @@ public class clientTesting extends ForumTest {
 		assertTrue(userHandler.changePolicy(p));
 		assertTrue(userHandler.changePolicy(p_2));
 		
-		userHandler.deleteSubForum(sportSubForum);
-		userHandler.deleteSubForum(animalsSubForum);
+		userHandler.deleteSubForum(sportSubForum.get_theme());
+		userHandler.deleteSubForum(animalsSubForum.get_theme());
 		assertTrue(userHandler.logout());
 	}
 

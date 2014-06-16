@@ -16,17 +16,15 @@ public interface IPost {
 	public ISubForum get_subForum();
 	public IUser get_author() ;
 	public Vector<IPost> get_replies();
-	public void delete();
-	
+	public void delete();	
 	public String get_header();
-
 	public String get_body();
-
 	public IPost get_parent_post();
-
-	public Date get_date();
-	
+	public Date get_date();	
 	public int get_id();
 	public int numDescendants();
+	public IPost search_RPost(String postSubject);
+	public Object toString(int indentions);
+	public void delete_replay(IPost post);
 
 }

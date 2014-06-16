@@ -1,5 +1,7 @@
 package Service_Layer;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Vector;
 
@@ -7,10 +9,10 @@ import Domain_layer.ForumComponent.IForum;
 import Domain_layer.ForumComponent.IPolicy;
 import Domain_layer.ForumComponent.IPost;
 import Domain_layer.ForumComponent.ISubForum;
-import Domain_layer.ForumComponent.MemberType;
 import Domain_layer.FourmUser.Complaint;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User.Status;
+import Domain_layer.FourmUser.Session.Session;
 import Network_layer.reactorClient.ConnectionHandler;
 import Network_layer.reactorServer.tokenizer.ForumMessage;
 import Network_layer.reactorServer.tokenizer.ForumMessage.ForumMessageCommendType;
@@ -52,6 +54,7 @@ public class ClientHandler implements IUserHandler {
 	//IUserHandler - interfacs
 
 	public boolean login(String username, String password) {		
+	//	String password_new  = PasswordEncryptor.encrypt(password) ;
 		Vector<Object> args = new  Vector<Object>();
         args.add(username);
         args.add(password);        
@@ -63,11 +66,34 @@ public class ClientHandler implements IUserHandler {
 	}
 
 	public boolean register(String username, String password,String repeated_password) {
+	//	String password_new  = PasswordEncryptor.encrypt(password) ;
+	//	String repeated_password_new   = PasswordEncryptor.encrypt(repeated_password) ; 
 		Vector<Object> args = new  Vector<Object>();
         args.add(username);
         args.add(password); 
         args.add(repeated_password); 
-        return (boolean) this.send_Commend(ForumMessageCommendType.REGISTER, args, false, ForumMessageReturnType.BOOLEAN);		
+        return (boolean) this.send_Commend(ForumMessageCommendType.REGISTER, args, false, ForumMessageReturnType.BOOLEAN);
+	}
+	
+
+	
+	public boolean register_Email(String username, String password,	String repeated_password, String email) {
+	//	String password_new  = PasswordEncryptor.encrypt(password) ;
+	//	String repeated_password_new   = PasswordEncryptor.encrypt(repeated_password) ; 
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        args.add(password); 
+        args.add(repeated_password); 
+        args.add(email);
+        return (boolean) this.send_Commend(ForumMessageCommendType.REGISTER_EMAIL, args, false, ForumMessageReturnType.BOOLEAN);		
+	}
+
+	
+	public boolean submit_code_registertion(String username, String code) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        args.add(code);
+        return (boolean) this.send_Commend(ForumMessageCommendType.SUBMIT_CODE_REG, args, false, ForumMessageReturnType.BOOLEAN);
 	}
 
 	public boolean createSubForum(String theme, String[] moderators_names) {
@@ -80,14 +106,6 @@ public class ClientHandler implements IUserHandler {
 	@SuppressWarnings("unchecked")
 	public Vector<ISubForum> show_sub_forum() {
         return (Vector<ISubForum>) this.send_Commend(ForumMessageCommendType.SH_SUBFORUM, new  Vector<Object>(), new Vector<ISubForum>(), ForumMessageReturnType.VEC_ISUBFORUM);
-	}
-
-	public boolean create_thread(String header, String body, ISubForum subForum) {
-		Vector<Object> args = new  Vector<Object>();
-        args.add(header);
-        args.add(body); 
-        args.add(subForum); 
-        return (boolean) this.send_Commend(ForumMessageCommendType.CR_THREAD, args, false, ForumMessageReturnType.BOOLEAN);
 	}
 
 	public boolean createReplyPost(String header, String body, IPost post) {
@@ -127,12 +145,6 @@ public class ClientHandler implements IUserHandler {
         return (boolean) this.send_Commend(ForumMessageCommendType.DELETE_POST, args, false, ForumMessageReturnType.BOOLEAN);
 	}
 
-	public boolean deleteSubForum(ISubForum sub_forum) {
-		Vector<Object> args = new  Vector<Object>();
-        args.add(sub_forum);
-        return (boolean) this.send_Commend(ForumMessageCommendType.DELETE_SUBFORUM, args, false, ForumMessageReturnType.BOOLEAN);
-	}
-
 	public boolean addcomplaintModerator(ISubForum sub_fourm, String search_word, String theme, String body) {
 		Vector<Object> args = new  Vector<Object>();
         args.add(sub_fourm);
@@ -142,6 +154,7 @@ public class ClientHandler implements IUserHandler {
         return (boolean) this.send_Commend(ForumMessageCommendType.ADD_COMP_MOD, args, false, ForumMessageReturnType.BOOLEAN);
 	}
 
+	/*
 	public boolean addMemberType(String type) {
 		Vector<Object> args = new  Vector<Object>();
         args.add(type);
@@ -157,32 +170,14 @@ public class ClientHandler implements IUserHandler {
 	public int getNumberOfMemberTypes() {
         return (int) this.send_Commend(ForumMessageCommendType.GET_NUM_MEMBER_TYPE, new  Vector<Object>(), 0, ForumMessageReturnType.INTEGER);
 	}
+	*/
 
-	@SuppressWarnings("unchecked")
-	public Vector<IPost> get_threads() {
-        return (Vector<IPost>) this.send_Commend(ForumMessageCommendType.GET_THREADS, new  Vector<Object>(), new Vector<IPost>(), ForumMessageReturnType.VEC_IPOST);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Vector<IPost> get_reaplayPosts() {
-        return (Vector<IPost>) this.send_Commend(ForumMessageCommendType.GET_REPLYPOST, new  Vector<Object>(), new Vector<IPost>(), ForumMessageReturnType.VEC_IPOST);
-	}
 
 	//setters and getters
-	public String get_password() { return (String) this.send_Commend(ForumMessageCommendType.GET_PASS, new  Vector<Object>(), "", ForumMessageReturnType.STRING);}
 	public String get_username() { return (String) this.send_Commend(ForumMessageCommendType.GET_USERNAME, new  Vector<Object>(), "", ForumMessageReturnType.STRING);}
 	public IForum get_forum() {	return (IForum) this.send_Commend(ForumMessageCommendType.GET_FORUM, new  Vector<Object>(), null, ForumMessageReturnType.IFORUM);}
-	public Vector<IPost> get_replyPosts() {	return get_reaplayPosts();}	
-	@SuppressWarnings("unchecked")
-	public Vector<IUser> get_friends() {return (Vector<IUser>) this.send_Commend(ForumMessageCommendType.GET_FRIENDS, new  Vector<Object>(), null, ForumMessageReturnType.VEC_IUSER);}
-	@SuppressWarnings("unchecked")
-	public Vector<Complaint> get_complaints() {	return (Vector<Complaint>) this.send_Commend(ForumMessageCommendType.GET_COMP, new  Vector<Object>(), null, ForumMessageReturnType.VEC_COMP);}
-	public Date get_start_date() {	return (Date) this.send_Commend(ForumMessageCommendType.GET_STARTDATE, new  Vector<Object>(), null, ForumMessageReturnType.STARTDATE);}
 	public Status get_status() {return (Status) this.send_Commend(ForumMessageCommendType.GET_STATUS, new  Vector<Object>(), null, ForumMessageReturnType.STATUS);}
-	public String get_email() {	return (String) this.send_Commend(ForumMessageCommendType.GET_EMAIL, new  Vector<Object>(), "", ForumMessageReturnType.STRING);}
-	public MemberType get_type() {return (MemberType) this.send_Commend(ForumMessageCommendType.GET_TYPE, new  Vector<Object>(), "", ForumMessageReturnType.MEMBERTYPE);}
 	public IUser get_current_user() {return (IUser) this.send_Commend(ForumMessageCommendType.GET_CUR_USR, new  Vector<Object>(), "", ForumMessageReturnType.IUSER);}
-	public Status getUserStatus() {	return get_status();}
 	public boolean addModerator(String sub_forum_theme,	String username_to_moderate) {
 		Vector<Object> args = new  Vector<Object>();
         args.add(sub_forum_theme);
@@ -202,21 +197,171 @@ public class ClientHandler implements IUserHandler {
         args.add(sub_forum_theme);
         return (int) this.send_Commend(ForumMessageCommendType.NUM_POSTS_SUBFORUM, args, false, ForumMessageReturnType.INTEGER);
 	}
-	public int numPostsUser(String username) {
+	public int numPosts_user(String username) {
 		Vector<Object> args = new  Vector<Object>();
         args.add(username);
         return (int) this.send_Commend(ForumMessageCommendType.NUM_POSTS_USER, args, false, ForumMessageReturnType.INTEGER);
 	}
-	@SuppressWarnings("unchecked")
-	public Vector<IUser> Moderators_list() { return ( Vector<IUser>) this.send_Commend(ForumMessageCommendType.MODERATORS_LIST, new  Vector<Object>(), false, ForumMessageReturnType.VEC_IUSER);}
+	public String Moderators_list(String sub_forum_theme) { 
+		Vector<Object> args = new  Vector<Object>();
+        args.add(sub_forum_theme);
+		return ( String) this.send_Commend(ForumMessageCommendType.MODERATORS_LIST,args, "", ForumMessageReturnType.STRING);}
 	public String Moderators_Report() {return (String) this.send_Commend(ForumMessageCommendType.MODERATORS_REPORT, new  Vector<Object>(), false, ForumMessageReturnType.STRING);}
 	
 	public boolean setMethodPolicy(String Methodname, Status s) {
 		return (boolean) this.send_Commend(ForumMessageCommendType.SET_METHOD_POLICY, new  Vector<Object>(), false, ForumMessageReturnType.BOOLEAN);
 	}
 
-	public boolean create_thread(String header, String body, String string) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean create_thread(String header, String body, String sub_forum_theme) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(header);
+        args.add(body);
+        args.add(sub_forum_theme);
+        return (boolean) this.send_Commend(ForumMessageCommendType.CR_THREAD, args, false, ForumMessageReturnType.BOOLEAN);
 	}
+
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Vector<IPost> get_theardsSubForum(String subforumPost) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(subforumPost);
+        return (Vector<IPost>) this.send_Commend(ForumMessageCommendType.GET_THREADS_SUBFORUM, args, new  Vector<IPost>(), ForumMessageReturnType.VEC_IPOST);
+	}
+
+
+
+	public String get_forum_name() {
+		return (String) this.send_Commend(ForumMessageCommendType.FORUM_NAME, new  Vector<Object>(), "DEFAULT_NAME", ForumMessageReturnType.STRING);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Vector<IPost> get_replyPosts(IPost parent) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(parent);
+        return (Vector<IPost>) this.send_Commend(ForumMessageCommendType.GET_REPLYPOST_POST, args, new  Vector<IPost>(), ForumMessageReturnType.VEC_IPOST);
+	}
+
+	@Override
+	public String[] show_sub_forum_names() {
+        return (String[]) this.send_Commend(ForumMessageCommendType.SH_SUBFORUM_NAMES,  new  Vector<Object>(),new String[]{}, ForumMessageReturnType.STRING_ARRAY);
+	}
+
+	@Override
+	public boolean deleteSubForum(String sub_forum) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(sub_forum);
+        return (boolean) this.send_Commend(ForumMessageCommendType.DELETE_SUBFORUM_THEME, args, false, ForumMessageReturnType.BOOLEAN);
+	}
+	
+	public void observe(int port) {
+		String ip="";
+		try {
+			 ip = InetAddress.getLocalHost().getHostAddress();        
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		Vector<Object> args = new  Vector<Object>();
+        args.add(ip);
+        args.add(port);
+        boolean result = (boolean) this.send_Commend(ForumMessageCommendType.OBSERVE, args, false, ForumMessageReturnType.BOOLEAN);
+        if(!result)
+        	throw new RuntimeException("OBSERVE FAIL");
+        
+	}
+
+	
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public Vector<Session> get_sessions() {
+		return (Vector<Session>) this.send_Commend(ForumMessageCommendType.SESSIONS, new  Vector<Object>(), new  Vector<Session>(), ForumMessageReturnType.VEC_SESSIONS);
+	}	
+	
+	
+	@SuppressWarnings("unchecked")
+	public Vector<Complaint> get_userComplaint(String username) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        return (Vector<Complaint>) this.send_Commend(ForumMessageCommendType.GET_COMP, args, false, ForumMessageReturnType.VEC_COMP);
+	}
+
+	
+	
+	
+	
+	
+	/******************emty methods******************/
+	@Override
+	public void log_action(String func_name, Date date) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void log_error(String func_name, Date date, Exception e) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public int start_sassion() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void end_sassion(int sassion_number) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void add_sassion(String func_name, int sassion_number) {
+		// TODO Auto-generated method stub		
+	}
+
+	
+	//REPORTS
+	@Override
+	public int numPostsForum() {
+        return (int) this.send_Commend(ForumMessageCommendType.NUM_POSTS_FORUM,new  Vector<Object>(),-1, ForumMessageReturnType.INTEGER);
+	}
+
+	
+	public Status get_status_user(String username) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        return (Status) this.send_Commend(ForumMessageCommendType.GET_STATUS_USER,args,Status.GUEST, ForumMessageReturnType.STATUS);
+	}
+
+	public Date get_start_date_user(String username) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        return (Date) this.send_Commend(ForumMessageCommendType.GET_STARTDATE_USER,args,new Date(), ForumMessageReturnType.STARTDATE);
+	}
+
+	public String get_email_user(String username) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        return (String) this.send_Commend(ForumMessageCommendType.GET_EMAIL_USER,args,"", ForumMessageReturnType.STRING);
+	}
+
+	public int numSassions_user(String username) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        return (int) this.send_Commend(ForumMessageCommendType.SESSIONS_NUM_USER,args,-1, ForumMessageReturnType.INTEGER);
+	}
+
+	public String moderator_subforum_list_user(String username) {
+		Vector<Object> args = new  Vector<Object>();
+        args.add(username);
+        return (String) this.send_Commend(ForumMessageCommendType.MODERATORS_SUBFROUM_LIST_USER,args,"", ForumMessageReturnType.STRING);
+	}
+
+
+
+
+	
+
 }

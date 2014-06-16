@@ -1,8 +1,8 @@
 package Tests.non_functional;
 
-import static org.junit.Assert.*;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,8 +18,8 @@ import Network_layer.reactorServer.tokenizer.ForumMessage;
 import Service_Layer.ClientHandler;
 
 
-public class non_functional_test_1 implements Runnable {
-	private static final int CLIENTS = 110;
+public class non_functional_test_1 extends TestCase  {
+	private static final int CLIENTS = 100;
 	private static  int ERRORS =0;
 	private int counter = 0;
 	private ClientHandler cl_handler_Main;
@@ -28,7 +28,28 @@ public class non_functional_test_1 implements Runnable {
 	@Before
 	public void setUp() throws Exception {
 		//init server
-		Thread myThread = new Thread(this);		
+		Thread myThread = new Thread(){
+			public void run() {
+				try {
+					int port = 6610 , poolSize =10;					
+					//create forum components
+					Policy p = new Policy();
+					Vector<String[]> admins = new  Vector<String[]>(); 
+					String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
+					admins.add(a1);	admins.add(a2);	admins.add(a3);	
+					
+					//create forum		
+					IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
+					Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
+					Thread thread = new Thread(reactor);
+					thread.start();			
+					Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
+					thread.join();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};		
 		myThread.start();
 		try {
 		    Thread.sleep(2000);
@@ -79,16 +100,16 @@ public class non_functional_test_1 implements Runnable {
 					assertTrue(sub!= null);	
 					assertTrue(sub_2!= null);	
 					
-					assertTrue(cl_handler.create_thread("hod" , "lalalskls slkd ajhs d " , sub));
+					assertTrue(cl_handler.create_thread("hod" , "lalalskls slkd ajhs d " , sub.get_theme()));
 					if(this.id %2 ==0)
-						assertTrue(cl_handler.create_thread("hadar" , "lalalskls slkd ajhs d " , sub_2));
+						assertTrue(cl_handler.create_thread("hadar" , "lalalskls slkd ajhs d " , sub_2.get_theme()));
 
 					assertTrue(cl_handler.logout());
 					assertTrue(cl_handler.login("bobi_2", "ksisodhah"));
 					
 					ISubForum sub_3 = cl_handler.search_subforum("Theme", "Music");
 					assertTrue(sub_3!= null);	
-					assertTrue(cl_handler.create_thread("hod" , "lalalskls slkd ajhs d " , sub_3));
+					assertTrue(cl_handler.create_thread("hod" , "lalalskls slkd ajhs d " , sub_3.get_theme()));
 			        
 			        cl_handler.close_connect();		
 				}
@@ -114,31 +135,12 @@ public class non_functional_test_1 implements Runnable {
 		assertTrue(cl_handler_Main.numPostsSubForum("Music")==CLIENTS);
 
 		assertTrue(cl_handler_Main.numPostsSubForum("Animals")==(CLIENTS/2 +CLIENTS%2));
-		assertTrue(cl_handler_Main.numPostsUser("bobi_2")==CLIENTS);
+		assertTrue(cl_handler_Main.numPosts_user("bobi_2")==CLIENTS);
 		
 
 	}
 
 
-	public void run() {
-		try {
-			int port = 6610 , poolSize =10;					
-			//create forum components
-			Policy p = new Policy();
-			Vector<String[]> admins = new  Vector<String[]>(); 
-			String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
-			admins.add(a1);	admins.add(a2);	admins.add(a3);	
-			
-			//create forum		
-			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
-			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
-			Thread thread = new Thread(reactor);
-			thread.start();			
-			Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
-			thread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 }

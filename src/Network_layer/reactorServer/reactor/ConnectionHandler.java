@@ -115,6 +115,7 @@ public class ConnectionHandler<T> {
 		// is the channel closed??
 		if (numBytesRead == -1) {
 			// No more bytes can be read from the channel
+			this._data.removeObserver(this._task.get_protocol().getOut());
 			logger.info("client on " + address + " has disconnected");
 			closeConnection();
 			// tell the protocol that the connection terminated.

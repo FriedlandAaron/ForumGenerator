@@ -44,7 +44,6 @@ public class Mail extends javax.mail.Authenticator implements IMail  , java.io.S
 	private IMAPStore   _imapStore ;
 	private IMAPFolder  _folder;
 	private Thread _listening_emails;
-	private MailHandler _mailHandler;
 	private boolean _isclose;
 	public Mail()
 	 {
@@ -78,10 +77,9 @@ public class Mail extends javax.mail.Authenticator implements IMail  , java.io.S
 	 }
 
  
-	public Mail(String user, String pass ,  MailHandler mailHandler)
+	public Mail(String user, String pass)
 	 {
 		 this();		 
-		_mailHandler=mailHandler;
 		_user = user;
 		_pass = pass;
 		_from = user;
@@ -107,9 +105,7 @@ public class Mail extends javax.mail.Authenticator implements IMail  , java.io.S
 			 // get inbox folder
 			_folder = (IMAPFolder) _imapStore.getFolder("inbox");
 			_folder.open(Folder.READ_WRITE);
-			if(_mailHandler!=null){
-				_folder.addMessageCountListener(this._mailHandler); 
-			}
+
 			this._isclose = true;
 	        
 		} catch (MessagingException e) {

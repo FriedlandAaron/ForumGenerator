@@ -1,9 +1,8 @@
 package Tests.integration_test.network;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,14 +17,35 @@ import Network_layer.reactorServer.tokenizer.ForumMessage;
 import Service_Layer.ClientHandler;
 
 
-public class integration_test_2 implements Runnable {
+public class integration_test_2 extends TestCase {
 
 	private ClientHandler cl_handler ;
 
 	@Before
 	public void setUp() throws Exception {
 		//init server
-		Thread myThread = new Thread(this);		
+		Thread myThread = new Thread(){
+			public void run() {
+				try {
+					int port = 6662 , poolSize =3;					
+					//create forum components
+					Policy p = new Policy();
+					Vector<String[]> admins = new  Vector<String[]>(); 
+					String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
+					admins.add(a1);	admins.add(a2);	admins.add(a3);	
+					
+					//create forum		
+					IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
+					Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
+					Thread thread = new Thread(reactor);
+					thread.start();			
+					Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
+					thread.join();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};		
 
 		
 		myThread.start();
@@ -59,26 +79,4 @@ public class integration_test_2 implements Runnable {
 		assertTrue(cl_handler.createSubForum("Animals" ,  (new String[]{"yosi"})));
 		assertFalse(cl_handler.createSubForum("Animals" ,  (new String[]{"sapir"})));	
 	}
-	
-	public void run() {
-		try {
-			int port = 6662 , poolSize =3;					
-			//create forum components
-			Policy p = new Policy();
-			Vector<String[]> admins = new  Vector<String[]>(); 
-			String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
-			admins.add(a1);	admins.add(a2);	admins.add(a3);	
-			
-			//create forum		
-			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
-			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
-			Thread thread = new Thread(reactor);
-			thread.start();			
-			Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
-			thread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

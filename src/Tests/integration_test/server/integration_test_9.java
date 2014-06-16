@@ -1,20 +1,25 @@
 package Tests.integration_test.server;
 
-import static org.junit.Assert.*;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Domain_layer.ForumComponent.*;
+import Domain_layer.ForumComponent.Forum;
+import Domain_layer.ForumComponent.IForum;
+import Domain_layer.ForumComponent.IPolicy;
+import Domain_layer.ForumComponent.ISubForum;
+import Domain_layer.ForumComponent.Policy;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User.Status;
 import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
 
 
-public class integration_test_9 {
+public class integration_test_9 extends TestCase  {
 	private IForum forum;
 	private IUserHandler super_admin ;
 
@@ -87,13 +92,7 @@ public class integration_test_9 {
 		assertTrue(admin.addModerator("Sport", "sapir"));
 		assertTrue(admin.numSharedModeratorsSubForum()== 1);
 
-		//Moderators_list
-		Vector<IUser> list  = admin.Moderators_list();
-		assertTrue(list.size()==3);
-		for(IUser user : list)
-			assertTrue(user.get_username().equals("sapir")||
-						user.get_username().equals("yosi")||
-						user.get_username().equals("alin"));
+		
 
 		//search for diff subforum and open new_thred_on them
 		ISubForum sub = admin.search_subforum("Theme", "Sport");
@@ -102,13 +101,13 @@ public class integration_test_9 {
 		//posrts numbber 
 		assertTrue(sub!= null);	
 		assertTrue(admin.numPostsSubForum("Sport")== 0);
-		assertTrue(admin.numPostsUser(admin.get_username())== 0);
-		assertTrue(admin.create_thread("machckj" , "lalalskls slkd ajhs d " , sub));
+		assertTrue(admin.numPosts_user(admin.get_username())== 0);
+		assertTrue(admin.create_thread("machckj" , "lalalskls slkd ajhs d " , sub.get_theme()));
 		assertTrue(admin.numPostsSubForum("Sport")== 1);
-		assertTrue(admin.numPostsUser(admin.get_username())== 1);
-		assertTrue(admin.create_thread("machckj" , "lalalskls slkd ajhs d " , sub_2));
+		assertTrue(admin.numPosts_user(admin.get_username())== 1);
+		assertTrue(admin.create_thread("machckj" , "lalalskls slkd ajhs d " , sub_2.get_theme()));
 		assertTrue(admin.numPostsSubForum("Animals")== 1);
-		assertTrue(admin.numPostsUser(admin.get_username())== 2);
+		assertTrue(admin.numPosts_user(admin.get_username())== 2);
 
 
 		// Moderators_Report
@@ -129,6 +128,36 @@ public class integration_test_9 {
 			public boolean removeMemberType(IUser current_user) {return current_user.getStatus().equals(Status.SUPER_ADMINISTRATOR);}
 			public boolean addMemberType(IUser current_user) {return current_user.getStatus().equals(Status.SUPER_ADMINISTRATOR);}
 			public boolean setMethodPolicy(IUser current_user,String Methodname, Status s) {return false;}
+			public boolean get_userComplaint(IUser current_user){return current_user.getStatus().equals(Status.SUPER_ADMINISTRATOR);}
+			public boolean numPostsForum(IUser current_user) {
+				return false;
+			}
+			@Override
+			public boolean get_status_user(IUser _current_user) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			@Override
+			public boolean get_start_date_user(IUser _current_user) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			@Override
+			public boolean get_email(IUser _current_user) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			@Override
+			public boolean numSassions_user(IUser _current_user) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			@Override
+			public boolean moderator_subforum_list_user(IUser _current_user) {
+				// TODO Auto-generated method stub
+				return false;
+			}	
+
 		};
 		assertTrue(admin.changePolicy(p));
 		assertTrue(admin.changePolicy(p_2));

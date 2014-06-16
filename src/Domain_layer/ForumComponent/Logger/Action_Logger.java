@@ -2,10 +2,10 @@ package Domain_layer.ForumComponent.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import Network_layer.reactorServer.tokenizer.ForumMessage.ForumMessageCommendType;
+import java.util.Iterator;
 
 public class Action_Logger   implements java.io.Serializable {
+
 	/**
 	 * 
 	 */
@@ -14,8 +14,18 @@ public class Action_Logger   implements java.io.Serializable {
 	public Action_Logger(){
 		entrys = new ArrayList<Action_Logger_Entry>();
 	}
-	public void addentry(String username ,String ip,ForumMessageCommendType commend , Date date) {
-		entrys.add(new Action_Logger_Entry(username, ip , commend ,date ));
+	public void addentry(String username ,String commend , Date date) {
+		Action_Logger_Entry a = new Action_Logger_Entry(username , commend ,date );
+		entrys.add(a);
 	}
 
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<Action_Logger>\n");
+		Iterator<Action_Logger_Entry> i = entrys.iterator();
+		while(i.hasNext())
+			sb.append("> ").append(i.next().toString()).append("\n");
+		sb.append("<Action_Logger>");
+		return sb.toString();
+	}
 }

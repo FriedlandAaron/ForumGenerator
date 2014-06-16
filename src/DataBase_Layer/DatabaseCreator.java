@@ -2,13 +2,8 @@ package DataBase_Layer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DatabaseCreator{
 	private String dbURL    = "jdbc:mysql://localhost:3306/test";
@@ -42,34 +37,32 @@ public class DatabaseCreator{
 			//create a Statement object for sending SQL statements to the database
 			Statement st = dbConn.createStatement();
 			
-			String forums = "CREATE TABLE IF NOT EXISTS forumDB.FORUMS " +
+			/*String forums = "CREATE TABLE IF NOT EXISTS forumDB.FORUMS " +
 					        "(forum_id integer NOT NULL AUTO_INCREMENT, " +
 					        " theme VARCHAR(20) NOT NULL, " + 
 					        " PRIMARY KEY (forum_id)) ";
 			st.executeUpdate(forums);
+			*/
 			
 			String users = "CREATE TABLE IF NOT EXISTS forumDB.USERS " +
 						   "(username VARCHAR(20) NOT NULL UNIQUE, " + 
 			               " password VARCHAR(20) NOT NULL, " + 
 			               " forum_id integer NOT NULL, " + 
 			               " start_date DATE, " +
-			               " is_banned BOOLEAN, " +
-			               " status ENUM('GUEST', 'MEMBER', 'ADMINISTRATOR', 'SUPER_ADMINISTRATOR'), " + 
+			               " status VARCHAR(20), " + 
 			               " email VARCHAR(30), " + 
 			               " member_type VARCHAR(30), " +
+			               " CHECK (status IN ('GUEST', 'MEMBER', 'ADMINISTRATOR', 'SUPER_ADMINISTRATOR')), " + 
 			               " PRIMARY KEY (username)) " ;
-						   //" FOREIGN KEY (forum_id) REFERENCES FORUMS(forum_id)) ";
-						   
+						   //" FOREIGN KEY (forum_id) REFERENCES FORUMS(forum_id)) ";			   
 			st.executeUpdate(users);
 
 			String subforums = "CREATE TABLE IF NOT EXISTS forumDB.SUBFORUMS " +
-								"(subforum_id INTEGER NOT NULL AUTO_INCREMENT, " +
-								" theme VARCHAR(20) NOT NULL,  " +
-								" PRIMARY KEY (subforum_id)) ";
-						
+							   "(theme VARCHAR(20) NOT NULL UNIQUE ,  " +
+							   " PRIMARY KEY (theme)) ";
 			st.executeUpdate(subforums);
 			
-			String subforums_moderators = "CREATE TABLE IF NOT EXISTS forumDB.SUBFORUMS_MODERATORS " +
+			/*String subforums_moderators = "CREATE TABLE IF NOT EXISTS forumDB.SUBFORUMS_MODERATORS " +
 					   					  "(subforum_id INTEGER NOT NULL, " + 
 					   					  " moderator_id  VARCHAR(20) NOT NULL, " + 
 					   					  " PRIMARY KEY (subforum_id,  moderator_id), " + 
@@ -95,23 +88,24 @@ public class DatabaseCreator{
  					  					  " FOREIGN KEY (moderator_id) REFERENCES forumDB.USERS(username)) ";
 			
 			st.executeUpdate(suspended_moderators);
+			*/
 			
 			String posts = "CREATE TABLE IF NOT EXISTS forumDB.POSTS " +
 						   "(post_id INTEGER NOT NULL AUTO_INCREMENT, " +
 						   " header VARCHAR(20) NOT NULL,  " +
 						   " body VARCHAR(20) NOT NULL,  " +
 						   " parent_post INTEGER, " +
-						   " subforum_id INTEGER NOT NULL, " + 
+						   " subforum VARCHAR(20) NOT NULL, " + 
 						   " username VARCHAR(20) NOT NULL, " +
 						   " date DATE, " +
-						   " is_pending BOOLEAN, " +
 						   " PRIMARY KEY (post_id), " +
 						   " FOREIGN KEY (username) REFERENCES forumDB.USERS(username), " +
-						   " FOREIGN KEY (subforum_id) REFERENCES forumDB.SUBFORUMS(subforum_id), " +
+						   " FOREIGN KEY (subforum) REFERENCES forumDB.SUBFORUMS(theme), " +
 						   " FOREIGN KEY (parent_post) REFERENCES forumDB.POSTS(post_id)) ";
 			
 			st.executeUpdate(posts);
 			
+			/*
 			String subforums_threads = "CREATE TABLE IF NOT EXISTS forumDB.SUBFORUMS_THREADS " +
 									   "(subforum_id INTEGER NOT NULL, " + 
 									   " post_id INTEGER NOT NULL , " + 
@@ -179,7 +173,7 @@ public class DatabaseCreator{
 		   			                  " FOREIGN KEY (complaint_id) REFERENCES forumDB.COMPLAINTS(complaint_id)) ";
 			
 			st.executeUpdate(users_complaints);
-			
+			*/
 			
 			
 			

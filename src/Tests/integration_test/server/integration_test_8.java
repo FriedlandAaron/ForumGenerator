@@ -1,16 +1,21 @@
 package Tests.integration_test.server;
 
 import java.util.Vector;
+
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Domain_layer.ForumComponent.*;
+import Domain_layer.ForumComponent.Forum;
+import Domain_layer.ForumComponent.IForum;
+import Domain_layer.ForumComponent.Policy;
 import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
 
 
-public class integration_test_8 {
+public class integration_test_8 extends TestCase  {
 	private IForum forum;
 	private IUserHandler super_admin ;
 
@@ -46,27 +51,20 @@ public class integration_test_8 {
 	@Test
 	public void test() {	
 
-//		// Registration by e-mail
-//			 UserHandler guest_5 = new UserHandler(forum);
-//			 assertTrue(guest_5.register_Email("hadaramran_ghgd", "hhhhhhhh","hhhhhhhh", "ForumGeneratorWSEP142Test1@gmail.com"));
-//			 
-//		// Imitate guest 5 response e-mail
-//		Mail guest_5_email =new Mail("ForumGeneratorWSEP142Test1@gmail.com", "MiraBalaban" , null);
-//		guest_5_email.open_Store();
-//		try {
-//			assertTrue(guest_5_email.send(new String[]{"ForumGeneratorWSEP142@gmail.com"}, "highfoeum", "ajgdjagdjgas"));
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		 guest_5_email.close_Store();
-//				 
-//				 
-//		//create the Scanner
-//		Scanner terminalInput = new Scanner(System.in);				 
-//		terminalInput.nextLine();				 
-//		this.forum.checkValidationEmails();
-//		assertTrue(this.forum.isMember("hadaramran_ghgd"));
+		//un automate test
+		/*
+		IUserHandler user = new UserHandler(this.forum);
+		assertTrue(user.register_Email("hodamr", "bamobm", "bamobm" , "hadaramran@gmail.com"));
+		System.out.println("enter the submit code:");
+		@SuppressWarnings("resource")
+		Scanner s = new Scanner(System.in);
+		String code = s.nextLine();
+		assertTrue(user.submit_code_registertion("hodamr", code)); 		
+		
+		assertTrue(user.login("hodamr", "bamobm"));
+		assertTrue(user.logout());
+		assertFalse(user.logout());		
+		*/
 			
 	}
 	

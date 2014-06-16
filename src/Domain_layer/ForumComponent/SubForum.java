@@ -11,17 +11,13 @@ public class SubForum implements ISubForum  , java.io.Serializable {
 	private String _theme;
 	private Vector<IUser> _moderators;
 	private Vector<Date>  _moderator_dates;
-	private Vector<IUser> _suspended_moderators;
 	private Vector<IPost> _threads;
-	private Vector<IPost> _posts_pending;
 	
 	public SubForum( String theme, Vector<IUser> moderators, Vector<Date> moderator_dates) {
 		this._theme = theme;
 		this._moderators = moderators;
 		this._moderator_dates = moderator_dates;
-		this._suspended_moderators = new Vector<IUser>();
 		this._threads = new Vector<IPost>();
-		this._posts_pending = new Vector<IPost>();
 	}
 //---------------------------------------------------
 	public boolean openThread(IPost post) {
@@ -42,6 +38,9 @@ public class SubForum implements ISubForum  , java.io.Serializable {
 		return false;
 	}
 
+	public Vector<IPost> get_threads() {
+		return _threads;
+	}
 	public Vector<IPost> showThreads() {
 		return _threads;
 	}
@@ -78,13 +77,6 @@ public class SubForum implements ISubForum  , java.io.Serializable {
 		return _moderator_dates;
 	}
 
-	public Vector<IUser> get_suspended_moderators() {
-		return _suspended_moderators;
-	}
-
-	public Vector<IPost> get_posts_pending() {
-		return _posts_pending;
-	}
 	public int numPostsSubForum() {
 		int size = this._threads.size();
 		for(int i=0 ; i<this._threads.size(); i++)
@@ -102,5 +94,46 @@ public class SubForum implements ISubForum  , java.io.Serializable {
 			this._moderator_dates.remove(i);			
 		}
 	}
+
+	//new gui
+	public IPost search_Post(String postSubject) {
+		IPost p ;
+		for(int i=0 ; i< this._threads.size() ; i++){
+			p = this._threads.get(i);
+			if(p.get_header().equals(postSubject))
+				return p;
+			p= p.search_RPost(postSubject);
+			if(p!=null)
+				return p;
+		}
+		return null;
+			
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SubForum other = (SubForum) obj;
+		if (_theme == null) {
+			if (other._theme != null)
+				return false;
+		} else if (!_theme.equals(other._theme))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		StringBuilder sb = new  StringBuilder("SubForum: " + _theme) ;
+		for(IPost p : this._threads)
+			sb.append("\n\t").append(p.toString(2));
+		return sb.toString();
+	}
+	
+	
 	
 }

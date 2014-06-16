@@ -1,8 +1,8 @@
 package Tests.integration_test.network;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,14 +18,35 @@ import Network_layer.reactorServer.tokenizer.ForumMessage;
 import Service_Layer.ClientHandler;
 
 
-public class integration_test_3 implements Runnable {
+public class integration_test_3 extends TestCase {
 
 	private ClientHandler cl_handler ;
 
 	@Before
 	public void setUp() throws Exception {
 		//init server
-		Thread myThread = new Thread(this);		
+		Thread myThread = new Thread(){
+			public void run() {
+				try {
+					int port = 6663 , poolSize =3;					
+					//create forum components
+					Policy p = new Policy();
+					Vector<String[]> admins = new  Vector<String[]>(); 
+					String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
+					admins.add(a1);	admins.add(a2);	admins.add(a3);	
+					
+					//create forum		
+					IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
+					Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
+					Thread thread = new Thread(reactor);
+					thread.start();			
+					Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
+					thread.join();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};		
 
 		
 		myThread.start();
@@ -62,7 +83,7 @@ public class integration_test_3 implements Runnable {
 		
 		Vector<ISubForum> list_sub = cl_handler.show_sub_forum();
 		if(list_sub.size()>0){
-			assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0)));
+			assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0).get_theme()));
 		}
 		
 		ISubForum sub_animals = cl_handler.search_subforum("Theme","Animals");
@@ -76,33 +97,10 @@ public class integration_test_3 implements Runnable {
 
 	 //delete sub forum 
 		 assertTrue(cl_handler.login("bobi_1", "kikdoskd"));
-		 assertTrue(cl_handler.deleteSubForum(sub_Music));
+		 assertTrue(cl_handler.deleteSubForum(sub_Music.get_theme()));
 		 assertTrue(cl_handler.logout());
 		 sub_Music = cl_handler.search_subforum("Theme", "Music");
 		 assertTrue(sub_Music == null);
-	}
-	
-	
-	
-	public void run() {
-		try {
-			int port = 6663 , poolSize =3;					
-			//create forum components
-			Policy p = new Policy();
-			Vector<String[]> admins = new  Vector<String[]>(); 
-			String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
-			admins.add(a1);	admins.add(a2);	admins.add(a3);	
-			
-			//create forum		
-			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
-			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
-			Thread thread = new Thread(reactor);
-			thread.start();			
-			Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
-			thread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }

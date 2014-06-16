@@ -113,6 +113,40 @@ public class Post implements IPost  , java.io.Serializable {
 		return size;	
 	}
 
+	
+	//new gui
+	public IPost search_RPost(String postSubject) {
+		IPost p ;
+		for(int i=0 ; i< this._replies.size() ; i++){
+			p=  this._replies.get(i).search_RPost(postSubject);
+			if(p!=null)
+				return p;
+		}
+		return null;
+	}
+
+	@Override
+	public Object toString(int indentions) {
+		
+		StringBuilder sb = new  StringBuilder("post: " + this._header) ;
+		for(IPost p : this._replies){
+			sb.append("\n");
+			for(int i=1  ; i<= indentions  ;i++)
+				sb.append("\t");
+			sb.append(p.toString(indentions+1));
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public void delete_replay(IPost post) {
+		for(int i = 0 ; i < this._replies.size(); i++) {
+			if(this._replies.get(i).get_id()==post.get_id()) {
+				this._replies.remove(i);
+			}
+		}		
+	}
+
 
 	
 }

@@ -59,6 +59,7 @@ public class ConnectionAcceptor<T> {
 			ConnectionHandler<T> handler = ConnectionHandler.create(sChannel, _data, key);
 			IUserHandler userHandler = new UserHandler(_data.getIForum());
 			handler.GetProtocol().InitUserHandler(userHandler);
+			handler.GetProtocol().InitReactorData(this._data);
 			handler.switchToReadWriteMode(); // set the handler to read only mode
 			
 		}

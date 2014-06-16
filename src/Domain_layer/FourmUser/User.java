@@ -6,7 +6,7 @@ import java.util.Vector;
 import Domain_layer.ForumComponent.IForum;
 import Domain_layer.ForumComponent.IPost;
 import Domain_layer.ForumComponent.ISubForum;
-import Domain_layer.ForumComponent.MemberType;
+import Domain_layer.FourmUser.Session.Session;
 
 
 @SuppressWarnings("serial")
@@ -29,15 +29,15 @@ public class User implements IUser  , java.io.Serializable{
 	
 	private String _username;
 	private String _password;
-	private IForum _forum;
 	private Vector<IPost> _threads;
 	private Vector<IPost> _replyPosts;
-	private Vector<IUser> _friends;
 	private Vector<Complaint> _complaints;
 	private Date _start_date;
 	private Status _status;
 	private String _email;
-	private MemberType _type;
+	private Vector<Session> _sassions = new  Vector<Session>() ;
+
+
 
 	public User(String username, String password, Status status) {
 		this._status = status;
@@ -45,7 +45,6 @@ public class User implements IUser  , java.io.Serializable{
 		this._password = password;
 		this._threads = new Vector<IPost>();
 		this._replyPosts = new Vector<IPost>();
-		this._friends = new Vector<IUser>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date = new Date();
 		this._email = "";
@@ -54,55 +53,42 @@ public class User implements IUser  , java.io.Serializable{
 	public User(IForum forum, String username, String password, Status status) {
 		this._username = username;
 		this._password = password;
-		this._forum = forum;
 		this._threads = new Vector<IPost>();
 		this._replyPosts = new Vector<IPost>();
-		this._friends = new Vector<IUser>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date = new Date();
 		this._status =status;
 		this._email = "";
-		this._type = this._forum.getMemberTypeByName("Default");
 	}
 
 	public User(IForum forum, String username, String password, Status status, String email) {
 		this._username = username;
 		this._password = password;
-		this._forum = forum;
 		this._threads = new Vector<IPost>();
 		this._replyPosts = new Vector<IPost>();
-		this._friends = new Vector<IUser>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date = new Date();
 		this._status = status;
 		this._email = email;
-		this._type = this._forum.getMemberTypeByName("Default");		
 	}
 	
 	public User(IForum iForum, String username) {
 		this._username = username;
 		this._password = "";
-		this._forum = iForum;
 		this._threads = new Vector<IPost>();
 		this._replyPosts = new Vector<IPost>();
-		this._friends = new Vector<IUser>();
 		this._complaints = new Vector<Complaint>();
 		this._start_date = new Date();
 		this._status = Status.GUEST;
 		this._email = "";
-		this._type = this._forum.getMemberTypeByName("Default");
 
 	}
 //--------------------------------------------------------------------
-	public void set_type(MemberType _type) {
-		this._type = _type;
-	}
+
 	public String get_username() {
 		return _username;
 	}
-	public IForum get_forum() {
-		return _forum;
-	}
+
 	public void set_username(String _username) {
 		this._username = _username;
 	}
@@ -111,9 +97,6 @@ public class User implements IUser  , java.io.Serializable{
 		this._password = _password;
 	}
 	
-	public void set_forum(IForum _forum) {
-		this._forum = _forum;
-	}
 		
 	public String get_password() {
 		return _password;
@@ -174,9 +157,6 @@ public class User implements IUser  , java.io.Serializable{
 		return _replyPosts;
 	}
 
-	public Vector<IUser> get_friends() {
-		return _friends;
-	}
 
 	public Vector<Complaint> get_complaints() {
 		return _complaints;
@@ -194,9 +174,6 @@ public class User implements IUser  , java.io.Serializable{
 		return _email;
 	}
 
-	public MemberType get_type() {
-		return _type;
-	}
 
 	public Status getStatus() {
 		return this._status;
@@ -207,8 +184,88 @@ public class User implements IUser  , java.io.Serializable{
 		return this._replyPosts.size()+this._threads.size();
 	}
 
+	@Override
+	public void set_start_date(Date start_date) {
+		this._start_date = start_date ; 
+		
+	}
+
+	@Override
+	public void set_email(String email) {
+		this._email = email ; 
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (_email == null) {
+			if (other._email != null)
+				return false;
+		} else if (!_email.equals(other._email))
+			return false;
+		if (_password == null) {
+			if (other._password != null)
+				return false;
+		} else if (!_password.equals(other._password))
+			return false;
+		/*if (_start_date == null) {
+			if (other._start_date != null)
+				return false;
+		} else if (!_start_date.equals(other._start_date))
+			return false;*/
+		if (_status != other._status)
+			return false;
+/*		if (_type == null) {
+			if (other._type != null)
+				return false;
+		} else if (!_type.equals(other._type))
+			return false;*/
+		if (_username == null) {
+			if (other._username != null)
+				return false;
+		} else if (!_username.equals(other._username))
+			return false;
+		return true;
+	}
 
 	
+	
+	public int start_sassion() {
+		synchronized (this._sassions) {
+			int sassions_num = this._sassions.size();
+			this._sassions.add(new Session());	
+			return sassions_num;
+		}
+	}
+
+	@Override
+	public void end_sassion(int sassion_number) {
+		if(sassion_number<this._sassions.size() && sassion_number>=0 )			
+			this._sassions.get(sassion_number).end_Sassion();
+	}
+
+	@Override
+	public void add_sassion(String func_name, int sassion_number) {
+		if(sassion_number<this._sassions.size()  && sassion_number>=0 )			
+			this._sassions.get(sassion_number).addAction(func_name);
+	}
+
+	public Vector<Session> get_sessions() {
+		return _sassions;
+	}
+
+	@Override
+	public int get_numSessions() {
+		return _sassions.size();
+	}
 	
 	
 

@@ -18,18 +18,18 @@ public class ForumServer {
 		
 		try {
 			int port = 4444;
-			int poolSize =3;
+			int poolSize = 10;
 			
 			//create forum components
 			Policy p = new Policy();
 			Vector<String[]> admins = new  Vector<String[]>(); 
-			String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
+		    String[] a1 = {"oren" , "pass"} , a2 =  {"liraz" , "1111"}  , a3  = {"mira_123" , "jhgJGG"};
 			admins.add(a1);
 			admins.add(a2);
 			admins.add(a3);	
 			
 			//create forum		
-			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
+			IForum forum = Forum.createForum( "hadaramran" , "123456789" ,p ,admins, "WorkShop Forum");	
 			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
 			Thread thread = new Thread(reactor);
 			thread.start();			

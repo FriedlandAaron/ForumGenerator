@@ -1,8 +1,8 @@
 package Tests.integration_test.network;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,13 +20,34 @@ import Network_layer.reactorServer.tokenizer.ForumMessage;
 import Service_Layer.ClientHandler;
 
 
-public class integration_test_6 implements Runnable {
+public class integration_test_6 extends TestCase {
 	private ClientHandler cl_handler ;
 
 	@Before
 	public void setUp() throws Exception {
 		//init server
-		Thread myThread = new Thread(this);			
+		Thread myThread = new Thread(){
+			public void run() {
+				try {
+					int port = 6666 , poolSize =3;					
+					//create forum components
+					Policy p = new Policy();
+					Vector<String[]> admins = new  Vector<String[]>(); 
+					String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
+					admins.add(a1);	admins.add(a2);	admins.add(a3);	
+					
+					//create forum		
+					IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
+					Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
+					Thread thread = new Thread(reactor);
+					thread.start();			
+					Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
+					thread.join();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};			
 		myThread.start();
 		try {
 		    Thread.sleep(2000);
@@ -63,7 +84,7 @@ public class integration_test_6 implements Runnable {
 		//search for diff subforum and open new_thred_on them
 		Vector<ISubForum> list_sub = cl_handler.show_sub_forum();
 		if(list_sub.size()>0){
-			assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0)));
+			assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , list_sub.get(0).get_theme()));
 		}	
 
 		// Adding a reply post to the existing post
@@ -78,30 +99,9 @@ public class integration_test_6 implements Runnable {
 		 //add complaint
 		 IUser moderator = sub_animals.getModerator("yosi");
 		 assertTrue(moderator!=null);
-		 assertTrue(cl_handler.create_thread("hadar" , "lkjhas" , sub_animals));
+		 assertTrue(cl_handler.create_thread("hadar" , "lkjhas" , sub_animals.get_theme()));
 		 assertTrue(cl_handler.addcomplaintModerator(sub_animals , "yosi" , "theme_complient" , "body_complient"));
 		 
-	}
-	
-	public void run() {
-		try {
-			int port = 6666 , poolSize =3;					
-			//create forum components
-			Policy p = new Policy();
-			Vector<String[]> admins = new  Vector<String[]>(); 
-			String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
-			admins.add(a1);	admins.add(a2);	admins.add(a3);	
-			
-			//create forum		
-			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
-			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
-			Thread thread = new Thread(reactor);
-			thread.start();			
-			Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
-			thread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }

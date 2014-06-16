@@ -1,19 +1,21 @@
 package Tests.integration_test.server;
 
-import static org.junit.Assert.*;
-
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Domain_layer.ForumComponent.*;
+import Domain_layer.ForumComponent.Forum;
+import Domain_layer.ForumComponent.IForum;
+import Domain_layer.ForumComponent.Policy;
 import Service_Layer.IUserHandler;
 import Service_Layer.UserHandler;
 
 
-public class integration_test_2 {
+public class integration_test_2 extends TestCase  {
 	private IForum forum;
 	private IUserHandler super_admin ;
 

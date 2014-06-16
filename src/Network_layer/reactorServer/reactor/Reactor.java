@@ -39,7 +39,7 @@ public class Reactor<T> implements Runnable {
 	
     private final IForum _forum; 
 
-	
+    
 
 	/**
 	 * Creates a new Reactor
@@ -221,6 +221,7 @@ public class Reactor<T> implements Runnable {
 		};
 
 		Reactor<ForumMessage> reactor = new Reactor<ForumMessage>(port, poolSize, protocolMaker, tokenizerMaker , forum);
+		
 		return reactor;
 	}
 	

@@ -21,10 +21,9 @@ public interface ISubForum {
 	public IUser getModerator(String modName);
 	public Vector<IUser> get_moderators();
 	public Vector<Date> get_moderator_dates();
-	public Vector<IUser> get_suspended_moderators();
-	public Vector<IPost> get_posts_pending();
 	public int numPostsSubForum();
 	public void addModerator(IUser user);
 	public void removeModerator(IUser user);
-	
+	public Vector<IPost> get_threads() ;
+
 }

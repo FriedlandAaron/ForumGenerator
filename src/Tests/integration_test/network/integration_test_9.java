@@ -1,14 +1,19 @@
 package Tests.integration_test.network;
 
-import static org.junit.Assert.*;
-
 import java.io.Serializable;
 import java.util.Vector;
+
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Domain_layer.ForumComponent.*;
+import Domain_layer.ForumComponent.Forum;
+import Domain_layer.ForumComponent.IForum;
+import Domain_layer.ForumComponent.IPolicy;
+import Domain_layer.ForumComponent.ISubForum;
+import Domain_layer.ForumComponent.Policy;
 import Domain_layer.FourmUser.IUser;
 import Domain_layer.FourmUser.User.Status;
 import Network_layer.reactorClient.ConnectionHandler;
@@ -17,13 +22,35 @@ import Network_layer.reactorServer.tokenizer.ForumMessage;
 import Service_Layer.ClientHandler;
 
 
-public class integration_test_9 implements Runnable{
+public class integration_test_9 extends TestCase{
 	private ClientHandler cl_handler ;
 
 	@Before
 	public void setUp() throws Exception {
 		//init server
-		Thread myThread = new Thread(this);		
+		Thread myThread = new Thread(){
+			public void run() {
+				try {
+					int port = 6669 , poolSize =3;					
+					//create forum components
+					Policy p = new Policy();
+					Vector<String[]> admins = new  Vector<String[]>(); 
+					String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
+					admins.add(a1);	admins.add(a2);	admins.add(a3);	
+					
+					//create forum		
+					IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
+					Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
+					Thread thread = new Thread(reactor);
+					thread.start();			
+					Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
+					thread.join();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		};
 		myThread.start();
 		try {
 		    Thread.sleep(2000);
@@ -77,18 +104,12 @@ public class integration_test_9 implements Runnable{
 		assertTrue(cl_handler.removeModerator("Animals", "sapir"));
 		assertTrue(cl_handler.numSharedModeratorsSubForum()== 0);
 		assertTrue(cl_handler.removeModerator("Sport", "sapir"));
+		
 		assertTrue(cl_handler.addModerator("Animals", "sapir"));
 		assertTrue(cl_handler.numSharedModeratorsSubForum()== 0);
 		assertTrue(cl_handler.addModerator("Sport", "sapir"));
 		assertTrue(cl_handler.numSharedModeratorsSubForum()== 1);
 
-		//Moderators_list
-		Vector<IUser> list  = cl_handler.Moderators_list();
-		assertTrue(list.size()==3);
-		for(IUser user : list)
-			assertTrue(user.get_username().equals("sapir")||
-						user.get_username().equals("yosi")||
-						user.get_username().equals("alin"));
 
 		//search for diff subforum and open new_thred_on them
 		ISubForum sub = cl_handler.search_subforum("Theme", "Sport");
@@ -97,13 +118,13 @@ public class integration_test_9 implements Runnable{
 		//posrts numbber 
 		assertTrue(sub!= null);	
 		assertTrue(cl_handler.numPostsSubForum("Sport")== 0);
-		assertTrue(cl_handler.numPostsUser(cl_handler.get_username())== 0);
-		assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , sub));
+		assertTrue(cl_handler.numPosts_user(cl_handler.get_username())== 0);
+		assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , sub.get_theme()));
 		assertTrue(cl_handler.numPostsSubForum("Sport")== 1);
-		assertTrue(cl_handler.numPostsUser(cl_handler.get_username())== 1);
-		assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , sub_2));
+		assertTrue(cl_handler.numPosts_user(cl_handler.get_username())== 1);
+		assertTrue(cl_handler.create_thread("machckj" , "lalalskls slkd ajhs d " , sub_2.get_theme()));
 		assertTrue(cl_handler.numPostsSubForum("Animals")== 1);
-		assertTrue(cl_handler.numPostsUser(cl_handler.get_username())== 2);
+		assertTrue(cl_handler.numPosts_user(cl_handler.get_username())== 2);
 
 
 		// Moderators_Report
@@ -118,26 +139,7 @@ public class integration_test_9 implements Runnable{
 
 	}
 	
-	public void run() {
-		try {
-			int port = 6669 , poolSize =3;					
-			//create forum components
-			Policy p = new Policy();
-			Vector<String[]> admins = new  Vector<String[]>(); 
-			String[] a1 = {"bobi_1" , "kikdoskd"} , a2 =  {"bobi_2" , "ksisodhah"}  , a3  = {"mira_123" , "jhgJGG"};
-			admins.add(a1);	admins.add(a2);	admins.add(a3);	
-			
-			//create forum		
-			IForum forum = Forum.createForum( "hadaramran" , "12374567" ,p ,admins, "Music-Forum");	
-			Reactor<ForumMessage> reactor = Reactor.startForumServer(port, poolSize ,forum);
-			Thread thread = new Thread(reactor);
-			thread.start();			
-			Reactor.logger_info("Reactor is ready on port " + reactor.getPort());
-			thread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 	
 	
 	
@@ -158,4 +160,34 @@ class Policy_test implements IPolicy,   Serializable{
 	public boolean removeMemberType(IUser current_user) {return current_user.getStatus().equals(Status.SUPER_ADMINISTRATOR);}
 	public boolean addMemberType(IUser current_user) {return current_user.getStatus().equals(Status.SUPER_ADMINISTRATOR);}
 	public boolean setMethodPolicy(IUser current_user,String Methodname, Status s) {return false;}
+	public boolean get_userComplaint(IUser _current_user) {return _current_user.getStatus().equals(Status.SUPER_ADMINISTRATOR);}
+	public boolean numPostsForum(IUser current_user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean get_status_user(IUser _current_user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean get_start_date_user(IUser _current_user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean get_email(IUser _current_user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean numSassions_user(IUser _current_user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean moderator_subforum_list_user(IUser _current_user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 };

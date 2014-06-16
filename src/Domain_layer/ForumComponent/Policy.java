@@ -17,6 +17,14 @@ public class Policy implements IPolicy   , java.io.Serializable  {
 	private Status removeMemberType;
 	private Status addMemberType;
 	private Status setMethodPolicy;
+	private Status get_userComplaint;
+	//NEED TO ADD
+	private Status numPostsForum;
+	private Status get_status_user;
+	private Status get_start_date_user;
+	private Status get_email;
+	private Status numSassions_user;
+	private Status moderator_subforum_list_user;
 
 	public Policy(){
 		createSubForum = 	Status.ADMINISTRATOR;
@@ -29,6 +37,13 @@ public class Policy implements IPolicy   , java.io.Serializable  {
 		removeMemberType = 	Status.SUPER_ADMINISTRATOR;
 		addMemberType =		Status.SUPER_ADMINISTRATOR;		
 		setMethodPolicy =	Status.SUPER_ADMINISTRATOR;		
+		get_userComplaint = Status.SUPER_ADMINISTRATOR;
+		numPostsForum =  Status.SUPER_ADMINISTRATOR;
+		get_status_user = Status.SUPER_ADMINISTRATOR;
+		get_start_date_user= Status.SUPER_ADMINISTRATOR;
+		get_email= Status.SUPER_ADMINISTRATOR;
+		numSassions_user= Status.SUPER_ADMINISTRATOR;
+		moderator_subforum_list_user= Status.SUPER_ADMINISTRATOR;
 	}
 	
 	
@@ -36,7 +51,9 @@ public class Policy implements IPolicy   , java.io.Serializable  {
 			Status pol_deletePost, Status pol_deleteSubForum,
 			Status pol_addModerator, Status pol_removeModerator,
 			Status pol_getNumberOfTypes, Status pol_removeMemberType,
-			Status pol_addMemberType, Status pol_setMethodPolicy) {
+			Status pol_addMemberType, Status pol_setMethodPolicy ,
+			Status get_userComplaint, Status numPostsForum, Status get_status_user, Status get_start_date_user,
+			Status get_email, Status numSassions_user, Status moderator_subforum_list_user) {
 		this.createSubForum = pol_createSubForum;
 		this.changePolicy = pol_changePolicy;
 		this.deletePost = pol_deletePost;
@@ -47,10 +64,19 @@ public class Policy implements IPolicy   , java.io.Serializable  {
 		this.removeMemberType = pol_removeMemberType;
 		this.addMemberType = pol_addMemberType;
 		this.setMethodPolicy = pol_setMethodPolicy;
+		this.get_userComplaint = get_userComplaint;
+		
+		this.numPostsForum = numPostsForum;
+		this.get_status_user = get_status_user;
+		this.get_start_date_user = get_start_date_user;
+		this.get_email = get_email;
+		this.numSassions_user = numSassions_user;
+		this.moderator_subforum_list_user = moderator_subforum_list_user;
+
 	}
 
 
-	//--------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------
 	public boolean login(IUser current_user) {
 		return current_user.getStatus().equals(Status.GUEST);
 	}
@@ -102,4 +128,13 @@ public class Policy implements IPolicy   , java.io.Serializable  {
 		}
 		return false;
 	}
+
+	public boolean get_userComplaint(IUser _current_user) {	return this.get_userComplaint.has_permission(_current_user.getStatus());}
+	public boolean numPostsForum(IUser current_user) {return this.numPostsForum.has_permission(current_user.getStatus());}
+	//need to implemnts
+	public boolean get_status_user(IUser _current_user) {return this.get_status_user.has_permission(_current_user.getStatus());}
+	public boolean get_start_date_user(IUser _current_user) {return this.get_start_date_user.has_permission(_current_user.getStatus());}
+	public boolean get_email(IUser _current_user) {	return this.get_email.has_permission(_current_user.getStatus());}
+	public boolean numSassions_user(IUser _current_user) {return this.numSassions_user.has_permission(_current_user.getStatus());}
+	public boolean moderator_subforum_list_user(IUser _current_user) {return this.moderator_subforum_list_user.has_permission(_current_user.getStatus());}
 }

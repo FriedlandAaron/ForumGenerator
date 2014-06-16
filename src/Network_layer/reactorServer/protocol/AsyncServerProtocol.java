@@ -1,7 +1,5 @@
 package Network_layer.reactorServer.protocol;
 
-import Service_Layer.IUserHandler;
-
 /**
  * A protocol that describes the behavior of the server.
  */
@@ -33,5 +31,6 @@ public interface AsyncServerProtocol<T> extends ServerProtocol<T> {
 	 * Indicate to the protocol that the client disconnected.
 	 */
 	public void connectionTerminated();
-	public void InitUserHandler(IUserHandler userHandler) ;
+
+
 }
